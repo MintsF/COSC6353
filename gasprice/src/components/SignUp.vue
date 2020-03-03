@@ -1,83 +1,155 @@
 
- <template>
-  <div class="signUp">
-  	<div class="logo" > gas price prediction</div>
-    <div>
-      <el-input placeholder="Username" v-model="name" clearable class="input_style"></el-input>
-      <span>{{msgname}}</span>
-    </div>
-    <div>
-      <el-input placeholder="Password" v-model="password" show-password class="input_style"></el-input>
-      <span>{{msgpassword}}</span>
-    </div>
-    <div>
-      <el-input placeholder="Confirm password" v-model="confirmPassword" show-password class="input_style"></el-input>
-      <span>{{msgConfirmPassword}}</span>
-    </div>
-    <div>
-      <el-button type="primary" @click="signUp" class="signUp_style">Sign Up</el-button>
-    </div>
- 
+<template>
+<div>
+  <div class="leftside" style="width: 30%">jjjjjj</div>
+  <div class="rightside" style="width: 50%">
+    <div style="width: 25%;float: left">fff</div>
+    <div class="signup" style="width: 73%;float: left">
+      <!-- <div class="logo"  > gas price prediction</div> -->
+      <h2>Sign up for your account!</h2>
+      <h5>Join us today! Create your account easy with less information.</h5>
+
+      <div class="block1" >
+        <div class="tag1" ><span style="display: line-block; vertical-align: text-bottom;"><strong>Username</strong></span></div>
+        <div class="input_style"> 
+          <el-input placeholder="Username" v-model="name" clearable  ></el-input>
+        </div>
+      </div>
+
+      <div class="block1" >
+        <div class="tag1" ><span><strong>Password</strong></span></div>
+        <div class="input_style"> 
+          <el-input placeholder="********" v-model="pwd" show-password   ></el-input>
+        </div>
+      </div>
+
+      <div class="block1" >
+        <div class="tag1" ><span><strong>Confirm Password</strong></span></div>
+        <div class="input_style"> 
+          <el-input placeholder="********" v-model="cpwd" show-password   ></el-input>
+        </div>
+      </div>
+
+      <div >
+        <el-button type="primary" @click="signup" class="signup_style">Sign me Up!</el-button>
+      </div>
+      <div>
+        <div class="tag2"><a href="" style="color: gray">sign in</a></div>
+        <!-- <div class="tag2"><a href="" style="color: gray">Sign me Up!</a></div> -->
+      </div>
+    </div>  
   </div>
+</div>
+
 </template>
 
 <script>
+
   export default {
-    name: "Signup",
+    name: "SignUp",
     data(){
       return {
         name: '',
-        password : '',
-        confirmPassword: '',
-        msgname: '',
-        msgpassword: '',
-        msgConfirmPassword: ''
-
+        pwd : '',
+        cpwd: ''
       }
     },
     methods:{
-      signUp(){
+      signup(){
         
-      },
-      checkname:function(){
-        if(this.name.length==0){
-          this.msgname="Username can not be null";
-        }else if(this.name.length<2){
-          this.msgname="Username at least two signal";
-        }else{
-          this.msgame="";
-        }
-        return this.name>2;
-      },
-      checkpassword:function(){
-        var word=this.password.trim();
-        if(word.length==0)
-          this.msgpassword="password can not be null";
-        return word >=0;
       }
+
+
+
     }
   }
 </script>
 
 <style>
-  .signUp{
-    margin-top: 200px;
+  .leftside{
+    /*border-style: solid;*/
+  /*border-width: 5px;*/
+    /*border-color: red;*/
+    float: left;
+    /*height: auto;*/
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
+
+    background: linear-gradient(#97C74F,#2BB9A5);
+
   }
+  .rightside{
+  width: 70%;
+  float: left;
+/*  border-style: solid;
+  border-width: 5px;*/
+  /*display: flex;*/
+    min-height: 100vh;
+    flex-direction: column;
+
+  }
+
+  .signup{
+/*    border-style: solid;
+  border-width: 2px;
+  border-color: red;*/
+  margin-top: 100px;
+
+  text-align: center;
+  vertical-align: center;
+/*  min-height: 100vh;
+    flex-direction: column;*/
+  }
+
   .logo{
-  	font-family: "DejaVu Sans Mono";
-  	color: lightblue;
-  	text-align: center;
-  	font-size: 30px;
-    margin-bottom: 30px;
+    font-family: "DejaVu Sans Mono";
+    color: lightgreen;
+    text-align: center;
+    font-size: 30px;
+    margin-top: 50px;
+  }
+  .block1{
+    width: 60%;
+    display:inline-block;
+    text-align: center;
+/*    border-style: solid;
+  border-width: 2px;
+  border-color: yellow;
+  float: center;*/
+  margin-bottom: 20px;
+  }
+  .tag1{
+    width:fit-content;
+
+
+    /*text-align: center;*/
+    /*display:inline-block;*/
+    height: 30px;
+/*    border-style: solid;
+  border-width: 2px;
+  border-color: yellow;*/
+
   }
   .input_style{
-    width: 300px;
-    margin-bottom: 30px;
+    width: auto;
+    height: auto;
+    color: #495057;
+    background-color: #ffffff;
+    border: 2px solid #dfe2e5;
+    border-radius: 3px;
+    box-shadow: 0 0 15px lightgreen;
+    /*transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;*/
+
   }
-  .signUp_style{
-    width: 300px;
+  .signup_style{
+    /*width: 300px;*/
+    background-color: lightgreen;
+  }
+  .tag2{
+    height: auto;
+    margin-top: 10px;
   }
 
 </style>
-
 
