@@ -1,43 +1,36 @@
-
 <template>
 <div>
   <div class="leftside" style="width: 30%">jjjjjj</div>
   <div class="rightside" style="width: 50%">
   	<div style="width: 25%;float: left">fff</div>
   	<div class="login" style="width: 73%;float: left">
-  	  <!-- <div class="logo"  > gas price prediction</div> -->
+  	  
   	  <h2>Sign into your account!</h2>
   	  <h5>Nice to see you! Please log in with your account.</h5>
 
   	  <div class="block1" >
   	  	<div class="tag1" ><span style="display: line-block; vertical-align: text-bottom;"><strong>Username</strong></span></div>
   	    <div class="input_style">	
-  	      <el-input placeholder="Username" v-model="name" clearable  ></el-input>
+  	      <el-input placeholder="Username" v-model="userInfo.userName" clearable  ></el-input>
   	    </div>
   	  </div>
 
   	  <div class="block1" >
   	  	<div class="tag1" ><span><strong>Password</strong></span></div>
   	    <div class="input_style">	
-  	      <el-input placeholder="********" v-model="pwd" show-password   ></el-input>
+  	      <el-input placeholder="********" v-model="userInfo.userPassword" show-password   ></el-input>
   	    </div>
   	  </div>
-
-
-
-
-<!--   	  <div ><span>Password</span></div>
-      <div class="tag2">
-        <el-input placeholder="********" v-model="pwd" show-password class="input_style"></el-input>
-      </div> -->
 
       <div >
         <el-button type="primary" @click="login" class="login_style">Sign In</el-button>
       </div>
+
       <div>
         <div class="tag2"><a href="" style="color: gray">forget password</a></div>
         <div class="tag2"><a href="" style="color: gray">Sign Up</a></div>
       </div>
+
     </div> 	
   </div>
 </div>
@@ -45,21 +38,44 @@
 </template>
 
 <script>
+// import axios from '../../node_modules/axios';
 
-  export default {
+window.axios = require('axios');
+export default {
     name: "Login",
     data(){
       return {
-        name: '',
-        pwd : ''   
+      	userInfo: {
+      		userName: '',
+      		userPassword: '',
+
+      	}
+    
       }
     },
     methods:{
       login(){
-        
-      }
+      	if (this.userInfo.userName==''){
+      		alert('userName can not be none');
+            return false;
+      	}
+
+      	if(this.userInfo.userPassword==''){
+      		alert('password can not be none');
+      		return false;
+      	}
+
+      	 this.axios({
+      	 	methods: 'post',
+      	 	url: '/login',
+      	 	data: this.userInfo
+      	 }).then(res=>{
+      	 	console.log(res.data)
+      	 })
 
 
+
+     }
 
     }
   }
@@ -82,24 +98,16 @@
   .rightside{
 	width: 70%;
 	float: left;
-/*	border-style: solid;
-	border-width: 5px;*/
-	/*display: flex;*/
     min-height: 100vh;
     flex-direction: column;
 
   }
 
   .login{
-/*  	border-style: solid;
-	border-width: 2px;
-	border-color: red;*/
 	margin-top: 100px;
-
 	text-align: center;
 	vertical-align: center;
-/*	min-height: 100vh;
-    flex-direction: column;*/
+
   }
 
   .logo{
@@ -113,18 +121,10 @@
   	width: 60%;
   	display:inline-block;
   	text-align: center;
-/*  	border-style: solid;
-	border-width: 2px;
-	border-color: yellow;
-	float: center;*/
 	margin-bottom: 20px;
   }
   .tag1{
   	width:fit-content;
-
-
-  	/*text-align: center;*/
-  	/*display:inline-block;*/
     height: 30px;
 /*    border-style: solid;
 	border-width: 2px;
@@ -139,11 +139,9 @@
     border: 2px solid #dfe2e5;
     border-radius: 3px;
     box-shadow: 0 0 15px lightgreen;
-    /*transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;*/
 
   }
   .login_style{
-    /*width: 300px;*/
     background-color: lightgreen;
   }
   .tag2{
