@@ -28,8 +28,8 @@
       </div>
 
       <div>
-        <div class="tag2"> <a  style="color: gray">forget password</a></div>
-        <div class="tag2"><a href="" style="color: gray">Sign Up</a></div>
+        <div class="tag2"> <router-link to=""><a  style="color: gray">forget password</a></router-link> </div>
+        <div class="tag2"><router-link to="/SignUp"><a  style="color: gray">Sign Up</a></router-link></div>
       </div>
 
 
@@ -73,6 +73,7 @@ export default {
       	}
 
       	console.log("success");
+      	this.$router.push({ path: '/Profile' })
 
      }
 

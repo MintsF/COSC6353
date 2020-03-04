@@ -34,7 +34,7 @@
         <el-button type="primary" @click="signup" class="signup_style">Sign me Up!</el-button>
       </div>
       <div>
-        <div class="tag2"><a href="" style="color: gray">sign in</a></div>
+        <div class="tag2"><router-link to="/"><a  style="color: gray">Sign In</a></router-link></div>
         <!-- <div class="tag2"><a href="" style="color: gray">Sign me Up!</a></div> -->
       </div>
     </div>  
