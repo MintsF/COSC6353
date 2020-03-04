@@ -1,9 +1,9 @@
 <template>
 <div>
-  <div class="leftside" style="width: 30%">jjjjjj</div>
-  <div class="rightside" style="width: 50%">
-  	<div style="width: 25%;float: left">fff</div>
-  	<div class="login" style="width: 73%;float: left">
+  <div class="leftside" style="width: 30%">   </div>
+  <div class="rightside" style="width: 70%">
+  	<div style="width: 25%;float: left">   </div>
+  	<div class="login" style="width: 75%;float: left">
   	  
   	  <h2>Sign into your account!</h2>
   	  <h5>Nice to see you! Please log in with your account.</h5>
@@ -43,12 +43,13 @@
 <script>
 // import axios from '../../node_modules/axios';
 
-window.axios = require('axios');
+// window.axios = require('axios');
 export default {
     name: "Login",
     data(){
       return {
 
+      	logining: false,
       	userInfo: {
       		userName: '',
       		userPassword: '',
@@ -56,6 +57,9 @@ export default {
       	}
     
       }
+    },
+    mounted() {
+
     },
     methods:{
       login(){
@@ -66,13 +70,15 @@ export default {
             return false;
       	}
 
-
       	if(password==''){
       		alert('password can not be none');
       		return false;
       	}
 
       	console.log("success");
+      	this.$cookie.set('userInfo',this.userInfo,1000*60);
+      	console.log(this.$cookie.get('userInfo'));
+      	
       	this.$router.push({ path: '/Profile' })
 
      }
@@ -95,7 +101,7 @@ export default {
   .rightside{
 	width: 70%;
 	float: left;
-    min-height: 100vh;
+    /*min-height: 100vh;*/
     flex-direction: column;
 
   }
