@@ -12,21 +12,21 @@
       <div class="block1" >
         <div class="tag1" ><span style="display: line-block; vertical-align: text-bottom;"><strong>Username</strong></span></div>
         <div class="input_style"> 
-          <el-input placeholder="Username" v-model="name" clearable  ></el-input>
+          <el-input placeholder="Username" v-model="userInfo.name" clearable  ></el-input>
         </div>
       </div>
 
       <div class="block1" >
         <div class="tag1" ><span><strong>Password</strong></span></div>
         <div class="input_style"> 
-          <el-input placeholder="********" v-model="pwd" show-password   ></el-input>
+          <el-input placeholder="********" v-model="userInfo.pwd" show-password   ></el-input>
         </div>
       </div>
 
       <div class="block1" >
         <div class="tag1" ><span><strong>Confirm Password</strong></span></div>
         <div class="input_style"> 
-          <el-input placeholder="********" v-model="cpwd" show-password   ></el-input>
+          <el-input placeholder="********" v-model="userInfo.cpwd" show-password   ></el-input>
         </div>
       </div>
 
@@ -49,14 +49,52 @@
     name: "SignUp",
     data(){
       return {
-        name: '',
-        pwd : '',
-        cpwd: ''
+        userInfo: {
+          name: '',
+          pwd : '',
+          cpwd: '',
+
+        }
       }
     },
     methods:{
       signup(){
+        var name=this.userInfo.name;
+        var password= this.userInfo.pwd;
+        var confirmpassword=this.userInfo.cpwd;
+        if (name==''){
+          alert('userName can not be none');
+            return false;
+        }
+        var reg = /^[\d]+$/;
+        var s = reg.test(name);
+        console.log(s);
+        console.log(name.length);
+        console.log((name>=10000000));
+        if(name.length !=8 || !s || name<10000000 ){
+          alert('user name must be 8 digits and can not begin with 0');
+          return false;
+        }
+
+
+        if(password==''&&password.trim()==password ){
+          alert('password can not be none and can not include space');
+          return false;
+        }
+
+        if(confirmpassword=='' && confirmpassword.trim()==confirmpassword ){
+          alert('confirm password can not be none and can not include space');
+          return false;
+        }
+
         
+        if(confirmpassword!=password){
+          alert('password do not match, please try again');
+          return false;
+        }
+        console.log("success");
+        
+     
       }
 
 

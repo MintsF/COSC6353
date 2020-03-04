@@ -8,6 +8,7 @@
   	  <h2>Sign into your account!</h2>
   	  <h5>Nice to see you! Please log in with your account.</h5>
 
+
   	  <div class="block1" >
   	  	<div class="tag1" ><span style="display: line-block; vertical-align: text-bottom;"><strong>Username</strong></span></div>
   	    <div class="input_style">	
@@ -16,7 +17,7 @@
   	  </div>
 
   	  <div class="block1" >
-  	  	<div class="tag1" ><span><strong>Password</strong></span></div>
+  	  	<div class="tag1" ><span style="display: line-block; vertical-align: text-bottom;"><strong>Password</strong></span></div>
   	    <div class="input_style">	
   	      <el-input placeholder="********" v-model="userInfo.userPassword" show-password   ></el-input>
   	    </div>
@@ -27,15 +28,17 @@
       </div>
 
       <div>
-        <div class="tag2"><a href="" style="color: gray">forget password</a></div>
+        <div class="tag2"> <a  style="color: gray">forget password</a></div>
         <div class="tag2"><a href="" style="color: gray">Sign Up</a></div>
       </div>
+
 
     </div> 	
   </div>
 </div>
 
 </template>
+
 
 <script>
 // import axios from '../../node_modules/axios';
@@ -45,6 +48,7 @@ export default {
     name: "Login",
     data(){
       return {
+
       	userInfo: {
       		userName: '',
       		userPassword: '',
@@ -55,25 +59,20 @@ export default {
     },
     methods:{
       login(){
-      	if (this.userInfo.userName==''){
+      	var name=this.userInfo.userName;
+      	var password=this.userInfo.userPassword;
+      	if (name==''){
       		alert('userName can not be none');
             return false;
       	}
 
-      	if(this.userInfo.userPassword==''){
+
+      	if(password==''){
       		alert('password can not be none');
       		return false;
       	}
 
-      	 this.axios({
-      	 	methods: 'post',
-      	 	url: '/login',
-      	 	data: this.userInfo
-      	 }).then(res=>{
-      	 	console.log(res.data)
-      	 })
-
-
+      	console.log("success");
 
      }
 
@@ -83,11 +82,8 @@ export default {
 
 <style>
   .leftside{
-  	/*border-style: solid;*/
-	/*border-width: 5px;*/
-  	/*border-color: red;*/
+
   	float: left;
-  	/*height: auto;*/
   	display: flex;
     min-height: 100vh;
     flex-direction: column;
@@ -122,23 +118,28 @@ export default {
   	display:inline-block;
   	text-align: center;
 	margin-bottom: 20px;
+/*
+	border-style: solid;
+	border-width: 2px;
+	border-color: red;*/
   }
   .tag1{
   	width:fit-content;
-    height: 30px;
-/*    border-style: solid;
-	border-width: 2px;
-	border-color: yellow;*/
+    /*height: 40px;*/
+    text-align: left;
+
 
   }
   .input_style{
-    width: auto;
-    height: auto;
+    /*width: auto;*/
+    width:400px;
+    /*height: auto;*/
     color: #495057;
     background-color: #ffffff;
-    border: 2px solid #dfe2e5;
+    /*border: 2px solid #dfe2e5;*/
     border-radius: 3px;
     box-shadow: 0 0 15px lightgreen;
+
 
   }
   .login_style{
@@ -148,6 +149,7 @@ export default {
   	height: auto;
   	margin-top: 10px;
   }
+
 
 </style>
 
