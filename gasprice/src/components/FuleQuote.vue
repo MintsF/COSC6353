@@ -22,13 +22,13 @@
      <div v-if="contentId == 1">Fuel Quote
 
      </div>
-      <div v-if="contentId == 2">
+      <div v-if="contentId == 2" style="padding: 0px 40px">
         <h2>Fuel Quote History</h2>
         <template>
-          <el-table :data="tableData" stripe style="width: 100%; padding: 10px 100px" >
+          <el-table :data="tableData" stripe style="width: 100%; padding: 10px 0px" >
             <el-table-column prop="Order Date" label="Orde Date" width="180"></el-table-column>
             <el-table-column prop="Gallons Requested" label="Gallons Requested" width="180"></el-table-column>
-            <el-table-column prop="Delivery Address" label="Delivery Address"></el-table-column>
+            <el-table-column prop="Delivery Address" label="Delivery Address"  ></el-table-column>
             <el-table-column prop="Delivery Date" label="Delivery Date" width="180"></el-table-column>
             <el-table-column prop="Suggested Price" label="Suggested Price" width="180"></el-table-column>
             <el-table-column prop="Total Amount Due" label="Total Amount Due" width="180"></el-table-column>
@@ -37,7 +37,7 @@
             background
             layout="prev, pager, next"
             :total="1000"
-            stripe style="float: right;padding: 20px 100px">
+            stripe style="float: right;padding: 20px 30px">
           </el-pagination>
         </template>
       </div>
@@ -55,31 +55,15 @@
     name: "Login",
     data(){
       return {
+        serverPrefix:'https://rap.dipath.cn/mockjsdata/41',
         activeIndex: '1',
         contentId: 1,
         tableData:[],
-//        tableData: [{
-//          date: '2016-05-02',
-//          name: '王小虎',
-//          address: '上海市普陀区金沙江路 1518 弄'
-//        }, {
-//          date: '2016-05-04',
-//          name: '王小虎',
-//          address: '上海市普陀区金沙江路 1517 弄'
-//        }, {
-//          date: '2016-05-01',
-//          name: '王小虎',
-//          address: '上海市普陀区金沙江路 1519 弄'
-//        }, {
-//          date: '2016-05-03',
-//          name: '王小虎',
-//          address: '上海市普陀区金沙江路 1516 弄'
-//        }]
       }
     },
     mounted() {
       const vm = this;
-      this.contentId = 2;
+      this.contentId = 1;
 
     },
     methods:{
@@ -93,12 +77,14 @@
 //        console.log(key, keyPath);
       },
       getFuleQuoteHistory(){
+        var that = this;
         var data = "3355";//userId
-        this.$axios.get('https://rap.dipath.cn/mockjsdata/41/getFuleQuoteHistory',data).then(function(res){
-          console.log(res.data.msg);
-//          this.tableData = res.data.msg.QuoteList;
-
-
+        var url=this.serverPrefix+"/getFuleQuoteHistory";
+        this.$axios.get(url,data).then(function(res){
+//          console.log(res.data.msg);
+          var msg = res.data.msg;
+          that.tableData = msg.quoteList;
+          that.total = msg.total;
         },function(){
           console.log('error');
         });
