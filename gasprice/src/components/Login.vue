@@ -42,8 +42,8 @@
 
 <script>
 // import axios from '../../node_modules/axios';
-
 // window.axios = require('axios');
+import axios from 'axios'
 export default {
     name: "Login",
     data(){
@@ -78,8 +78,11 @@ export default {
       	console.log("success");
       	this.$cookie.set('userInfo',this.userInfo,1000*60);
       	console.log(this.$cookie.get('userInfo'));
-      	
-      	this.$router.push({ path: '/Profile' })
+     
+      	axios.post('SignUp',JSON.stringify(this.userInfo)).then(res=>{
+      		console.log(res);
+      	})
+      	// this.$router.push({ path: '/Profile' })
 
      }
 
