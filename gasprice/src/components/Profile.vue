@@ -98,15 +98,15 @@
 <script>
 
   export default {
-    name: "Login",
-    data(){
+    name: "Profile",
+    editProfile(){
       return {
         name: '',
         pwd : ''   
       }
     },
     methods:{
-      login(){
+      fileCreate(){
         
       }
 
