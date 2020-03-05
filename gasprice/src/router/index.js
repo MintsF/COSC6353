@@ -20,17 +20,26 @@ export default new Router({
     {
       path: '/Login',
       name: 'Login',
-      component: Login
+      component: Login,
+      meta: {
+        isLogin: false
+      }
     },
     {
     	path: '/SignUp',
     	name: 'SignUp',
-    	component: SignUp
+    	component: SignUp,
+      meta: {
+        isLogin: false
+      }
     },
     {
     	path: '/Profile',
     	name: 'Profile',
-    	component: Profile
+    	component: Profile,
+      meta: {
+        isLogin: true
+      }
     }
 
 
@@ -38,7 +47,10 @@ export default new Router({
     {
       path: '/FuleQuote',
       name: 'FuleQuote',
-      component: FuleQuote
+      component: FuleQuote,
+      meta: {
+        isLogin: true
+      }
     }
 
   ]
