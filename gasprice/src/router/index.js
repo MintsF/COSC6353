@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-// import HelloWorld from '@/components/HelloWorld'
+import HelloWorld from '@/components/HelloWorld'
 import Login from '@/components/Login'
 
 import FuelQuote from '@/components/FuelQuote'
@@ -55,6 +55,14 @@ export default new Router({
       path: '/FuelQuote',
       name: 'FuelQuote',
       component: FuelQuote,
+      meta: {
+        isLogin: true
+      }
+    },
+    {
+      path: '/HelloWorld',
+      name: 'HelloWorld',
+      component: HelloWorld,
       meta: {
         isLogin: true
       }

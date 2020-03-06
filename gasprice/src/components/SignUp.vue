@@ -1,9 +1,9 @@
 
 <template>
 <div>
-  <div class="leftside" style="width: 30%">jjjjjj</div>
+  <div class="leftside" style="width: 30%"></div>
   <div class="rightside" style="width: 50%">
-    <div style="width: 25%;float: left">fff</div>
+    <div style="width: 25%;float: left"></div>
     <div class="signup" style="width: 73%;float: left">
       <!-- <div class="logo"  > gas price prediction</div> -->
       <h2>Sign up for your account!</h2>
@@ -94,11 +94,17 @@
         }
         this.$axios({
           method: 'post',
-          url: 'https://www.fastmock.site/mock/b9af25ea0ab3dd7bc9695d3c606dc608/fule/register',        
-        }).then(response=>{
-          console.log("connect to server success!");
+          url: 'https://www.fastmock.site/mock/b9af25ea0ab3dd7bc9695d3c606dc608/fule/register', 
+          data:{
+            userid: name,
+            password: password
+                  
+          }
+          // transformRequest: [function(data)]    {
+          //   let ret=''
+          // } 
         })
-        console.log("success");
+       
         
      
       }
