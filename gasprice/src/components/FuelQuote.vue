@@ -250,6 +250,7 @@
     color: #8f9397;
     font-size: 0.65rem;
     padding-left: 20px;
+    cursor:pointer;
   }
   .main-container{
     min-height: calc(100vh - 50px);
