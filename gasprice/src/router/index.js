@@ -17,6 +17,13 @@ export default new Router({
   mode: 'history',
 
   routes: [
+    { 
+      path: '/',
+      redirect: '/Login',
+      meta: {
+        isLogin: false
+        }
+    },
     {
       path: '/Login',
       name: 'Login',

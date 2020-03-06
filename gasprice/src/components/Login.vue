@@ -41,9 +41,7 @@
 
 
 <script>
-// import axios from '../../node_modules/axios';
-// window.axios = require('axios');
-import axios from 'axios'
+
 export default {
     name: "Login",
     data(){
@@ -61,9 +59,10 @@ export default {
     mounted() {
 
     },
+
     methods:{
       login(){
-      	var name=this.userInfo.userName;
+      	var name=parseInt(this.userInfo.userName);
       	var password=this.userInfo.userPassword;
       	if (name==''){
       		alert('userName can not be none');
@@ -75,14 +74,51 @@ export default {
       		return false;
       	}
 
-      	console.log("success");
+      	// console.log("success");
       	this.$cookie.set('userInfo',this.userInfo,1000*60);
       	console.log(this.$cookie.get('userInfo'));
-     
-      	axios.post('SignUp',JSON.stringify(this.userInfo)).then(res=>{
-      		console.log(res);
+
+      	this.$axios({
+      		method: 'get',
+      		url: 'https://www.fastmock.site/mock/b9af25ea0ab3dd7bc9695d3c606dc608/fule/login',   			
+      	}).then(response=>{
+      		console.log("connect to db success!");
+      		var res =response.data.userInfo,
+      		len = res.length;
+      		var userNameArr= [];
+            var passWordArr= [];
+            //get all userInfo        
+            for(var i=0; i<len; i++){
+            	userNameArr.push(res[i].userid);
+            	passWordArr.push(res[i].password);
+            	console.log(userNameArr[i], passWordArr[i]);
+            }
+            //check userid
+            if(userNameArr.indexOf(name) === -1){
+            	console.log("userid do not exist");
+            	alert('userid do not exist!');
+            	return false;
+            }else{
+            	var index = userNameArr.indexOf(name);
+            	//check password
+            	if(passWordArr[index] === password){
+            		// console.log(userNameArr[index],passWordArr[index]);
+            		console.log(userNameArr[index],passWordArr[index]+" login success!!!!");
+            		this.$cookie.set('userInfo',this.userInfo,1000*60);
+            		console.log(this.$cookie.get('userInfo'));
+            	}else{
+            		console.log("password error");
+            		alert('password error');
+            		return false;
+            	}
+          }
+      		
+
+
+      	}, function(){
+      		console.log("can not connect to db");
       	})
-      	// this.$router.push({ path: '/Profile' })
+
 
      }
 
