@@ -3,7 +3,7 @@
     <div id="nav-bar">
     <div id="container">
       <div class="nav-brand-item"></div>
-      <div class="user-account" ><router-link to="/FuleQuote"><a style="margin-left: 5px">Home</a></router-link></div>
+      <div class="user-account" ><router-link to="/FuelQuote"><a style="margin-left: 5px">Home</a></router-link></div>
       <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect" id="nav"
                text-color="#8f9397"
                active-text-color="#4cbd89"
