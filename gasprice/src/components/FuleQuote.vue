@@ -19,9 +19,34 @@
   </div>
   <div class="main-container">
     <transition name="fade-transform" mode="out-in">
-     <div v-if="contentId == 1">Fuel Quote
-
-     </div>
+      <div v-if="contentId == 1"style="padding: 0px 40px">
+         <h2>Fuel Quote </h2>
+         <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="300px" class="demo-ruleForm" style="margin: 0px 330px">
+           <el-form-item label="Gallons Requested" required prop="GallonsRequested">
+             <el-col :span="21"><el-input v-model="ruleForm.GallonsRequested" placeholder="please input  Gallons Requested"></el-input></el-col>
+             <el-col :span="1">Gal.</el-col>
+           </el-form-item>
+           <el-form-item label=" Delivery Address" required prop="DeliveryAddress">
+             <el-input v-model="ruleForm.DeliveryAddress" placeholder="please input delivery address"></el-input>
+           </el-form-item>
+           <el-form-item label=" Deliver Date" required prop=" DeliverDate">
+             <el-date-picker type="date" placeholder="lease select deliver Date" v-model="ruleForm.DeliverDate" style="width: 100%;"></el-date-picker>
+           </el-form-item>
+           <el-form-item label=" Suggested Price"  prop="SuggestedPrice">
+             <el-col :span="21"><el-input v-model="ruleForm.DeliveryAddress"  readonly="readonly"></el-input></el-col>
+             <el-col :span="1">$</el-col>
+           </el-form-item>
+           <el-form-item label=" Total Amount Due"  prop="TotalAmountDue">
+             <el-col :span="21"><el-input v-model="ruleForm.DeliveryAddress"  readonly="readonly"></el-input></el-col>
+             <el-col :span="1">$</el-col>
+           </el-form-item>
+           <el-form-item>
+             <el-button type="success" @click="getPrice('ruleForm')">Get Price</el-button>
+             <el-button type="success" @click="submitForm('ruleForm')" disabled="disabled">Submit</el-button>
+             <el-button @click="resetForm('ruleForm')">Reset</el-button>
+           </el-form-item>
+         </el-form>
+      </div>
       <div v-if="contentId == 2" style="padding: 0px 40px">
         <h2>Fuel Quote History</h2>
         <template>
@@ -35,8 +60,11 @@
           </el-table>
           <el-pagination
             background
+            @current-change = "handleChangePage"
             layout="prev, pager, next"
-            :total="1000"
+            :page-size="5"
+            :total="total"
+            :current-page.sync="currentPage"
             stripe style="float: right;padding: 20px 30px">
           </el-pagination>
         </template>
@@ -59,6 +87,27 @@
         activeIndex: '1',
         contentId: 1,
         tableData:[],
+        total:0,
+        currentPage:1,
+        disabled:true,
+        ruleForm: {
+          GallonsRequested: '',
+          DeliveryAddress: '',
+          DeliverDate: '',
+        },
+        rules: {
+          GallonsRequested: [
+            { required: true,  message: 'please input  Gallons Requested', trigger: 'blur' },
+            { type: 'number',message: 'Gallons Requested must be a positive integer', trigger: 'blur' }
+          ],
+          DeliveryAddress: [
+            { required: true, message: 'please input delivery address', trigger: 'change' }
+          ],
+          DeliverDate: [
+            { type: 'date', required: true, message: 'please select deliver Date', trigger: 'change' }
+          ],
+
+        }
       }
     },
     mounted() {
@@ -76,9 +125,29 @@
           }
 //        console.log(key, keyPath);
       },
+      getPrice(){
+
+      },
+      submitForm(formName) {
+//        this.$refs[formName].validate((valid) => {
+//          if (valid) {
+//            alert('submit!');
+//          } else {
+//            console.log('error submit!!');
+//            return false;
+//          }
+//        });
+//        console.log(formName);
+      },
+      resetForm(formName) {
+        this.$refs[formName].resetFields();
+      },
       getFuleQuoteHistory(){
         var that = this;
-        var data = "3355";//userId
+        var data = {
+          userId:this.userId,
+          currentPage: this.currentPage
+        }
         var url=this.serverPrefix+"/getFuleQuoteHistory";
         this.$axios.get(url,data).then(function(res){
 //          console.log(res.data.msg);
@@ -88,8 +157,11 @@
         },function(){
           console.log('error');
         });
+    },
 
-
+    handleChangePage(val){
+      this.currentPage=val;
+      this.getFuleQuoteHistory();
     }
     },
 
