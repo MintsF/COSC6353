@@ -106,6 +106,28 @@ export default {
             		console.log(userNameArr[index],passWordArr[index]+" login success!!!!");
             		this.$cookie.set('userInfo',this.userInfo,1000*60);
             		console.log(this.$cookie.get('userInfo'));
+            		this.$router.push({path:'/HelloWorld'})
+
+            		// if(res.status == 200){
+              //         this.$store.commit('setToken',res.data);
+              //         localStorage.userName = this.userInfo.userName;
+              //         localStorage.token_expire = res.data.expire;
+              //         localStorage.token = res.data.token;
+              //         this.$notify({
+              //             title : '提示信息',
+              //             message : '登录成功',
+              //             type : 'success'
+              //         });
+              //         this.$router.push({path:'/'})
+              //     }else {
+              //         this.$notify({
+              //             title : '提示信息',
+              //             message : '账号或密码错误',
+              //             type : 'error'
+              //         });
+              //     }
+
+
             	}else{
             		console.log("password error");
             		alert('password error');
