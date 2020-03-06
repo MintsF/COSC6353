@@ -4,7 +4,7 @@
   <div id="nav-bar">
     <div id="container">
       <div class="nav-brand-item"></div>
-      <div class="user-account" ><i class="el-icon-user-solid"><span style="margin-left: 5px">Account</span></i></div>
+      <div class="user-account" @click="goToProfile()"><i class="el-icon-user-solid"><span style="margin-left: 5px">Account</span></i></div>
       <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect" id="nav"
                text-color="#8f9397"
                active-text-color="#4cbd89"
@@ -22,22 +22,22 @@
       <div v-if="contentId == 1"style="padding: 0px 40px">
          <h2>Fuel Quote </h2>
          <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="200px" class="demo-ruleForm" style="margin: 0px 330px">
-           <el-form-item label="Gallons Requested" required prop="GallonsRequested">
-             <el-col :span="21"><el-input v-model="ruleForm.GallonsRequested" placeholder="please input  Gallons Requested"></el-input></el-col>
+           <el-form-item label="Gallons Requested" required prop="gallonsRequested">
+             <el-col :span="21"><el-input v-model="ruleForm.gallonsRequested" placeholder="please input  Gallons Requested"></el-input></el-col>
              <el-col :span="1">Gal.</el-col>
            </el-form-item>
-           <el-form-item label=" Delivery Address" required prop="DeliveryAddress">
-             <el-input v-model="ruleForm.DeliveryAddress" placeholder="please input delivery address"></el-input>
+           <el-form-item label=" Deliver Date" required prop="deliverDate">
+             <el-date-picker type="date" placeholder="please select deliver Date" v-model="ruleForm.deliverDate" style="width: 100%;"></el-date-picker>
            </el-form-item>
-           <el-form-item label=" Deliver Date" required prop=" DeliverDate">
-             <el-date-picker type="date" placeholder="please select deliver Date" v-model="ruleForm.DeliverDate" style="width: 100%;"></el-date-picker>
+           <el-form-item label=" Delivery Address"  prop="deliveryAddress" >
+             <el-input v-model="ruleForm.deliveryAddress" placeholder="please input delivery address" readonly="readonly"></el-input>
            </el-form-item>
-           <el-form-item label=" Suggested Price"  prop="SuggestedPrice">
-             <el-col :span="21"><el-input v-model="ruleForm.DeliveryAddress"  readonly="readonly"></el-input></el-col>
+           <el-form-item label=" Suggested Price"  prop="suggestedPrice">
+             <el-col :span="21"><el-input v-model="ruleForm.suggestedPrice"  readonly="readonly"></el-input></el-col>
              <el-col :span="1">$</el-col>
            </el-form-item>
-           <el-form-item label=" Total Amount Due"  prop="TotalAmountDue">
-             <el-col :span="21"><el-input v-model="ruleForm.DeliveryAddress"  readonly="readonly"></el-input></el-col>
+           <el-form-item label=" Total Amount Due"  prop="totalAmountDue">
+             <el-col :span="21"><el-input v-model="ruleForm.totalAmountDue"  readonly="readonly"></el-input></el-col>
              <el-col :span="1">$</el-col>
            </el-form-item>
            <el-form-item>
@@ -88,22 +88,30 @@
         contentId: 1,
         tableData:[],
         total:0,
+
         currentPage:1,
-        disabled:true,
+        submitDisabled:true,
         ruleForm: {
-          GallonsRequested: '',
-          DeliveryAddress: '',
-          DeliverDate: '',
+          gallonsRequested:'',
+          deliveryAddress: '',
+          deliverDate: '',
+          suggestedPrice:'',
+          totalAmountDue:''
+        },
+        profile:{
+          userName: "",
+          address:"",
+          city: "",
+          state:"",
+          zipCode:0,
+          isRequestedFuel:0
         },
         rules: {
-          GallonsRequested: [
+          gallonsRequested: [
             { required: true,  message: 'please input  Gallons Requested', trigger: 'blur' },
             { type: 'number',message: 'Gallons Requested must be a positive integer', trigger: 'blur' }
           ],
-          DeliveryAddress: [
-            { required: true, message: 'please input delivery address', trigger: 'change' }
-          ],
-          DeliverDate: [
+          deliverDate: [
             { type: 'date', required: true, message: 'please select deliver Date', trigger: 'change' }
           ],
 
@@ -113,9 +121,27 @@
     mounted() {
       const vm = this;
       this.contentId = 1;
-
+      this.getUserProfile();
     },
     methods:{
+      getUserProfile(){
+        var that = this;
+        var data = {
+          userId:this.userId,
+        }
+        var url=this.serverPrefix+"/getUserProfile";
+        this.$axios.get(url,data).then(function(res){
+//          console.log(res.data.msg);
+          var msg = res.data.msg;
+          that.profile = msg.profile;
+          that.ruleForm.deliveryAddress = that.profile.address +", "+ that.profile.city +", "+ that.profile.state +" "+ that.profile.zipCode;
+        },function(){
+          console.log('error');
+        });
+      },
+      goToProfile(){
+        this.$router.push('/profile');
+      },
       handleSelect(key, keyPath) {
           if(key==1){
               this.contentId = 1;
@@ -126,7 +152,26 @@
 //        console.log(key, keyPath);
       },
       getPrice(){
-
+        var locationFactor=0.04;
+        var currentPrice = 1.5;
+        var rateHistoryFactor=0;
+        var gallonsRequestedFactor = 0.03;
+        var companyProfitFactor = 0.1;
+        var rateFluctuation = 0.03;
+        if(this.profile.state=="Texas"||this.profile.state=="TX") {
+          locationFactor = 0.02;
+        }
+        if(this.profile.isRequestedFuel != 0){
+          rateHistoryFactor = 0.01;
+        }
+        if(this.ruleForm.gallonsRequested >=1000){
+          gallonsRequestedFactor = 0.02
+        }
+//        if(ruleForm.deliverDate)
+        var margin = currentPrice * (locationFactor - rateHistoryFactor + gallonsRequestedFactor + companyProfitFactor + rateFluctuation)
+        var suggestedPrice = currentPrice + margin;
+        this.ruleForm.suggestedPrice = suggestedPrice;
+        this.ruleForm.totalAmountDue = suggestedPrice* this.ruleForm.gallonsRequested;
       },
       submitForm(formName) {
 //        this.$refs[formName].validate((valid) => {
