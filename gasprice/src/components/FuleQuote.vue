@@ -1,6 +1,6 @@
 
 <template>
-<div>
+<div >
   <div id="nav-bar">
     <div id="container">
       <div class="nav-brand-item"></div>
@@ -172,17 +172,20 @@
 </script>
 
 <style>
+
   #nav-bar{
     box-shadow: 0px 7px 20px -5px #d7d7d7;
     height: 62px;
   }
   #container{
     padding: 0 100px;
+    font-family: "Roboto", sans-serif !important;
   }
   #nav{
   	float: right;
   	display: flex;
     font-weight: 500;
+    /*font-family: "Roboto", sans-serif !important;*/
   }
   .nav-brand-item{
     /*display: block;*/
@@ -208,6 +211,7 @@
     width: 100%;
     position: relative;
     overflow: hidden;
+    font-family: "Roboto", sans-serif !important;
 
   }
   /*.el*/
@@ -223,6 +227,16 @@
   }
   .el-pagination.is-background .el-pager li:not(.disabled).active{
     background-color: #43bc91;
+  }
+
+  .el-button--success{
+    font-family: "Roboto", sans-serif;
+    font-weight: 600;
+    background:linear-gradient(150deg,  #97c74e 0%, #2ab9a5 100%);
+  }
+  .el-button--success:hover,.el-button--success:focus{
+    color: #ffffff;
+    background:linear-gradient(330deg,  #97c74e 0%, #2ab9a5 100%);
   }
 </style>
 
