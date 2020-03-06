@@ -21,7 +21,7 @@
     <transition name="fade-transform" mode="out-in">
       <div v-if="contentId == 1"style="padding: 0px 40px">
          <h2>Fuel Quote </h2>
-         <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="300px" class="demo-ruleForm" style="margin: 0px 330px">
+         <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="200px" class="demo-ruleForm" style="margin: 0px 330px">
            <el-form-item label="Gallons Requested" required prop="GallonsRequested">
              <el-col :span="21"><el-input v-model="ruleForm.GallonsRequested" placeholder="please input  Gallons Requested"></el-input></el-col>
              <el-col :span="1">Gal.</el-col>
@@ -30,7 +30,7 @@
              <el-input v-model="ruleForm.DeliveryAddress" placeholder="please input delivery address"></el-input>
            </el-form-item>
            <el-form-item label=" Deliver Date" required prop=" DeliverDate">
-             <el-date-picker type="date" placeholder="lease select deliver Date" v-model="ruleForm.DeliverDate" style="width: 100%;"></el-date-picker>
+             <el-date-picker type="date" placeholder="please select deliver Date" v-model="ruleForm.DeliverDate" style="width: 100%;"></el-date-picker>
            </el-form-item>
            <el-form-item label=" Suggested Price"  prop="SuggestedPrice">
              <el-col :span="21"><el-input v-model="ruleForm.DeliveryAddress"  readonly="readonly"></el-input></el-col>
@@ -51,12 +51,12 @@
         <h2>Fuel Quote History</h2>
         <template>
           <el-table :data="tableData" stripe style="width: 100%; padding: 10px 0px" >
-            <el-table-column prop="Order Date" label="Orde Date" width="180"></el-table-column>
-            <el-table-column prop="Gallons Requested" label="Gallons Requested" width="180"></el-table-column>
-            <el-table-column prop="Delivery Address" label="Delivery Address"  ></el-table-column>
-            <el-table-column prop="Delivery Date" label="Delivery Date" width="180"></el-table-column>
-            <el-table-column prop="Suggested Price" label="Suggested Price" width="180"></el-table-column>
-            <el-table-column prop="Total Amount Due" label="Total Amount Due" width="180"></el-table-column>
+            <el-table-column prop="orderDate" label="Orde Date" width="180"></el-table-column>
+            <el-table-column prop="gallonsRequested" label="Gallons Requested" width="180"></el-table-column>
+            <el-table-column prop="deliveryAddress" label="Delivery Address"  ></el-table-column>
+            <el-table-column prop="deliveryDate" label="Delivery Date" width="180"></el-table-column>
+            <el-table-column prop="suggestedPrice" label="Suggested Price" width="180"></el-table-column>
+            <el-table-column prop="totalAmountDue" label="Total Amount Due" width="180"></el-table-column>
           </el-table>
           <el-pagination
             background
@@ -83,7 +83,7 @@
     name: "Login",
     data(){
       return {
-        serverPrefix:'https://rap.dipath.cn/mockjsdata/41',
+        serverPrefix:'https://www.fastmock.site/mock/b9af25ea0ab3dd7bc9695d3c606dc608/fule',
         activeIndex: '1',
         contentId: 1,
         tableData:[],
@@ -148,7 +148,7 @@
           userId:this.userId,
           currentPage: this.currentPage
         }
-        var url=this.serverPrefix+"/getFuleQuoteHistory";
+        var url=this.serverPrefix+"/getFuelQuoteHistory";
         this.$axios.get(url,data).then(function(res){
 //          console.log(res.data.msg);
           var msg = res.data.msg;
