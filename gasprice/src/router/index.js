@@ -3,7 +3,7 @@ import Router from 'vue-router'
 import HelloWorld from '@/components/HelloWorld'
 import Login from '@/components/Login'
 
-import FuleQuote from '@/components/FuleQuote'
+import FuelQuote from '@/components/FuelQuote'
 // import SignUp from '@/components/SignUp'
 
 import SignUp from '@/components/SignUp'
@@ -17,7 +17,7 @@ export default new Router({
   mode: 'history',
 
   routes: [
-    { 
+    {
       path: '/',
       redirect: '/Login',
       meta: {
@@ -52,9 +52,9 @@ export default new Router({
 
     ,
     {
-      path: '/FuleQuote',
-      name: 'FuleQuote',
-      component: FuleQuote,
+      path: '/FuelQuote',
+      name: 'FuelQuote',
+      component: FuelQuote,
       meta: {
         isLogin: true
       }
