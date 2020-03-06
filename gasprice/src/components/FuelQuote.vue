@@ -140,7 +140,7 @@
         });
       },
       goToProfile(){
-        this.$router.push('/profile');
+        this.$router.push('/HelloWorld');
       },
       handleSelect(key, keyPath) {
           if(key==1){
