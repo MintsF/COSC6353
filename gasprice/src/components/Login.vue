@@ -82,7 +82,7 @@ export default {
       		method: 'get',
       		url: 'https://www.fastmock.site/mock/b9af25ea0ab3dd7bc9695d3c606dc608/fule/login',   			
       	}).then(response=>{
-      		console.log("connect to db success!");
+      		console.log("connect to server success!");
       		var res =response.data.userInfo,
       		len = res.length;
       		var userNameArr= [];
@@ -116,7 +116,7 @@ export default {
 
 
       	}, function(){
-      		console.log("can not connect to db");
+      		console.log("can not connect to server");
       	})
 
 

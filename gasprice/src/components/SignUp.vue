@@ -92,6 +92,12 @@
           alert('password do not match, please try again');
           return false;
         }
+        this.$axios({
+          method: 'post',
+          url: 'https://www.fastmock.site/mock/b9af25ea0ab3dd7bc9695d3c606dc608/fule/register',        
+        }).then(response=>{
+          console.log("connect to server success!");
+        })
         console.log("success");
         
      
