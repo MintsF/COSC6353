@@ -46,16 +46,16 @@
             <a @click="showdialog" style="text-align: left;color: blue">change password</a>
             <dialog-bar :show="show" :title="title" @hideModal="hideModal" @submit="submit">
               <div style="text-align: left">
-                <el-form-item label="old password" label-width="200px" >
-                  <el-input placeholder="********" v-model="userlist.userPassword" show-password   ></el-input>
+                <el-form-item label="old password" prop="password" label-width="200px" >
+                  <el-input placeholder="********" v-model="userlist.oldPassword" show-password   ></el-input>
                 </el-form-item>
 
                 <el-form-item label="new password" label-width="200px">
-                  <el-input placeholder="********" v-model="userlist.userPassword" show-password   ></el-input>
+                  <el-input placeholder="********" v-model="userlist.newPassword" show-password   ></el-input>
                 </el-form-item>
 
                 <el-form-item label="confirm password" label-width="200px">
-                  <el-input placeholder="********" v-model="userlist.userPassword" show-password   ></el-input>
+                  <el-input placeholder="********" v-model="userlist.confirmPassword" show-password   ></el-input>
                 </el-form-item>
               </div>
 
@@ -135,7 +135,12 @@
          {
           pattern: /(^\d{5}$)|(^\d{5}-\d{4}$)/,
           message: "number only"
+         }],
+         password: [{
+          required: true,
+          message: "please enter original password"
          }]
+
         }
         }
     },
