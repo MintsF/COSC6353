@@ -78,5 +78,25 @@ module.exports = {
     net: 'empty',
     tls: 'empty',
     child_process: 'empty'
+  },
+  optimization: {
+    runtimeChunk: {
+      name: 'manifest'
+    },
+    splitChunks: {
+      cacheGroups: {
+        commons: {
+          test:  /[\\/]node_modules[\\/]/,
+          name: 'vendor',
+          chunks: 'all'
+          
+      }
+
+      }
+
+
+    }
   }
+
 }
+
