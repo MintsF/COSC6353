@@ -12,14 +12,14 @@
   	  <div class="block1" >
   	  	<div class="tag1" ><span style="display: line-block; vertical-align: text-bottom;"><strong>Username</strong></span></div>
   	    <div class="input_style">	
-  	      <el-input placeholder="Username" v-model="userInfo.userName" clearable  ></el-input>
+  	      <el-input placeholder="Username" v-model="userInfo.username" clearable  ></el-input>
   	    </div>
   	  </div>
 
   	  <div class="block1" >
   	  	<div class="tag1" ><span style="display: line-block; vertical-align: text-bottom;"><strong>Password</strong></span></div>
   	    <div class="input_style">	
-  	      <el-input placeholder="********" v-model="userInfo.userPassword" show-password   ></el-input>
+  	      <el-input placeholder="********" v-model="userInfo.password" show-password   ></el-input>
   	    </div>
   	  </div>
 
@@ -40,7 +40,7 @@
 </template>
 
 
-<script>
+<script >
 
 export default {
     name: "Login",
@@ -49,8 +49,8 @@ export default {
 
       	logining: false,
       	userInfo: {
-      		userName: '',
-      		userPassword: '',
+      		username: '',
+      		password: '',
 
       	}
     
@@ -62,8 +62,12 @@ export default {
 
     methods:{
       login(){
-      	var name=parseInt(this.userInfo.userName);
-      	var password=this.userInfo.userPassword;
+      	// var name=parseInt(this.userInfo.username);
+        var name = this.userInfo.username
+      	var password=this.userInfo.password;
+        console.log("-----------");
+        console.log(this.userInfo.username);
+        console.log(this.userInfo.password);
       	if (name==''){
       		alert('userName can not be none');
             return false;
@@ -74,72 +78,25 @@ export default {
       		return false;
       	}
 
-      	// console.log("success");
-      	this.$cookie.set('userInfo',this.userInfo,1000*60);
-      	console.log(this.$cookie.get('userInfo'));
+        var postData =this.$qs.stringify ({
+          username: this.userInfo.username,
+          password: this.userInfo.password,
+        });
 
-      	this.$axios({
-      		method: 'get',
-      		url: 'https://www.fastmock.site/mock/b9af25ea0ab3dd7bc9695d3c606dc608/fule/login',   			
-      	}).then(response=>{
-      		console.log("connect to server success!");
-      		var res =response.data.userInfo,
-      		len = res.length;
-      		var userNameArr= [];
-            var passWordArr= [];
-            //get all userInfo        
-            for(var i=0; i<len; i++){
-            	userNameArr.push(res[i].userid);
-            	passWordArr.push(res[i].password);
-            	console.log(userNameArr[i], passWordArr[i]);
-            }
-            //check userid
-            if(userNameArr.indexOf(name) === -1){
-            	console.log("userid do not exist");
-            	alert('userid do not exist!');
-            	return false;
-            }else{
-            	var index = userNameArr.indexOf(name);
-            	//check password
-            	if(passWordArr[index] === password){
-            		// console.log(userNameArr[index],passWordArr[index]);
-            		console.log(userNameArr[index],passWordArr[index]+" login success!!!!");
-            		this.$cookie.set('userInfo',this.userInfo,1000*60);
-            		console.log(this.$cookie.get('userInfo'));
-            		this.$router.push({path:'/HelloWorld'})
+        this.$axios.post('/api/login/',postData).then(res=>{
+          console.log("connect to server success");
+          console.log(res.data.code);
 
-            		// if(res.status == 200){
-              //         this.$store.commit('setToken',res.data);
-              //         localStorage.userName = this.userInfo.userName;
-              //         localStorage.token_expire = res.data.expire;
-              //         localStorage.token = res.data.token;
-              //         this.$notify({
-              //             title : '提示信息',
-              //             message : '登录成功',
-              //             type : 'success'
-              //         });
-              //         this.$router.push({path:'/'})
-              //     }else {
-              //         this.$notify({
-              //             title : '提示信息',
-              //             message : '账号或密码错误',
-              //             type : 'error'
-              //         });
-              //     }
-
-
-            	}else{
-            		console.log("password error");
-            		alert('password error');
-            		return false;
-            	}
+          if (res.data.code==1002){
+            if(res.data.flag!=0)
+              this.$router.push('/FuelQuote')
+            else
+              this.$router.push('/HelloWorld')
           }
-      		
 
-
-      	}, function(){
-      		console.log("can not connect to server");
-      	})
+        }).catch((err)=>{
+          console.log("can not connect to server");
+        })
 
 
      }

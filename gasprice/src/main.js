@@ -5,8 +5,9 @@ import App from './App'
 import router from './router'
 
 import axios from 'axios'
-
+import store from './store/store'
 import VueCookies from 'vue-cookies'
+import qs from 'qs'
 
 // import vueCountryRegionSelect from 'vue-country-region-select'
 
@@ -18,10 +19,11 @@ Vue.config.productionTip = false
 Vue.use(ElementUI)
 Vue.prototype.$axios=axios
 Vue.prototype.$cookie = VueCookies
+Vue.prototype.$qs = qs
 // Vue.use(vueCountryRegionSelect)
 
-
-
+// axios.defaults.withCredentials=true;
+axios.defaults.baseURL = 'http://127.0.0.1:8000';
 
 /* eslint-disable no-new */
 new Vue({

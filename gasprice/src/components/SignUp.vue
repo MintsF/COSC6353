@@ -92,17 +92,16 @@
           alert('password do not match, please try again');
           return false;
         }
-        this.$axios({
-          method: 'post',
-          url: 'https://www.fastmock.site/mock/b9af25ea0ab3dd7bc9695d3c606dc608/fule/register', 
-          data:{
-            userid: name,
-            password: password
-                  
-          }
-          // transformRequest: [function(data)]    {
-          //   let ret=''
-          // } 
+
+        var postData =this.$qs.stringify ({
+          username: this.userInfo.name,
+          password: this.userInfo.pwd,
+        });
+        this.$axios.post('/api/register/',postData).then(res=>{
+          // this.$router.push({path:'/login'})
+          console.log(res)
+        }, function(){
+          console.log("sign up can not connect to server");
         })
        
         
@@ -202,4 +201,6 @@
   }
 
 </style>
+
+
 
