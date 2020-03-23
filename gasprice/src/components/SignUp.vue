@@ -60,6 +60,7 @@
     methods:{
       signup(){
         var name=this.userInfo.name;
+        name= name.replace(/\s+/g,"");
         var password= this.userInfo.pwd;
         var confirmpassword=this.userInfo.cpwd;
         if (name==''){
@@ -67,12 +68,12 @@
             return false;
         }
         var reg = /^[\d]+$/;
-        var s = reg.test(name);
-        console.log(s);
+        // var s = reg.test(name);
+        // console.log(s);
         console.log(name.length);
-        console.log((name>=10000000));
-        if(name.length !=8 || !s || name<10000000 ){
-          alert('user name must be 8 digits and can not begin with 0');
+        // console.log((name>=10000000));
+        if(name.length !=8){
+          alert('user name must be 8 characters without space');
           return false;
         }
 

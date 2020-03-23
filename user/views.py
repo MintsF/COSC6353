@@ -137,9 +137,9 @@ def register(request):
 		username= request.POST.get('username')
 		password = request. POST.get('password')
 		# print(username)
-		obj = UserInfo.objects.filter(username=username)
+		obj = UserInfo.objects.filter(username=username).count()
 		
-		if obj==[]:
+		if obj==0:
 			newUser=UserInfo.objects.create(username=username,password=password,flag=0)
 			newUser.save()
 			ret['code']=2001

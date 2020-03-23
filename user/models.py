@@ -7,11 +7,14 @@ class UserInfo(models.Model):
 	flag = models.IntegerField(null=False,default ='0')
 
 class Profile(models.Model):
-	fullname= models.CharField(max_length=256, null =False, blank= False)
-	address1 =models.CharField(max_length=256, null =False, blank= False)
-	address2= models.CharField(max_length=256)
-	city = models.CharField(mar_length=2)
-	state = models.CharField(mar_length=2,null= False, blank= False)
+	# username= models.CharField(max_length=8,unique=True,unique=True)
+	username= models.OneToOneField(UserInfo, on_delete=models.CASCADE,unique=True)
+	fullname= models.CharField(max_length=50, null =False, blank= False)
+	address1 =models.CharField(max_length=100, null =False, blank= False)
+	address2= models.CharField(max_length=100, null = True)
+	city = models.CharField(max_length=100,null =False, blank= False)
+	state = models.CharField(max_length=2,null= False, blank= False)
+	zipcode = models.CharField(max_length=9, null= False, blank= False)
 
 
 
