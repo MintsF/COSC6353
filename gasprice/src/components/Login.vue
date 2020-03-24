@@ -86,35 +86,10 @@ export default {
           password: this.userInfo.password,
         });
 
-      	this.$axios({
-      		method: 'get',
-      		url: 'https://www.fastmock.site/mock/b9af25ea0ab3dd7bc9695d3c606dc608/fule/login',
-      	}).then(response=>{
-      		console.log("connect to server success!");
-      		var res =response.data.userInfo,
-      		len = res.length;
-      		var userNameArr= [];
-            var passWordArr= [];
-            //get all userInfo
-            for(var i=0; i<len; i++){
-            	userNameArr.push(res[i].userid);
-            	passWordArr.push(res[i].password);
-            	console.log(userNameArr[i], passWordArr[i]);
-            }
-            //check userid
-            if(userNameArr.indexOf(name) === -1){
-            	console.log("userid do not exist");
-            	alert('userid do not exist!');
-            	return false;
-            }else{
-            	var index = userNameArr.indexOf(name);
-            	//check password
-            	if(passWordArr[index] === password){
-            		// console.log(userNameArr[index],passWordArr[index]);
-            		console.log(userNameArr[index],passWordArr[index]+" login success!!!!");
-            		this.$cookie.set('userInfo',this.userInfo,1000*60);
-            		console.log(this.$cookie.get('userInfo'));
-            		this.$router.push({path:'/HelloWorld'})
+        this.$axios.post('/api/login/',postData).then(res=>{
+          console.log("connect to server success");
+          console.log(res.data.code);
+
 
           if (res.data.code==1002){
             if(res.data.flag!=0)
@@ -126,11 +101,6 @@ export default {
         }).catch((err)=>{
           console.log("can not connect to server");
         })
-
-
-      	}, function(){
-      		console.log("can not connect to server");
-      	})
 
      }
 

@@ -113,16 +113,15 @@ def login(request):
 	try:
 		username = request.POST.get('username')
 		password = request.POST.get('password')
-		obj = UserInfo.objects.filter(username=username,password=password)
-		row= obj.count()
-		if row !=1:
+		obj = UserInfo.objects.get(username=username,password=password)
+		if not obj:
 			ret['code']= 1001
 			ret['msg']='username or password error'
 		else:
 			ret['code']=1002
-			ret['username']=username
+			ret['username']=obj.username
 			ret['password']=password
-			ret['flag']=UserInfo.objects.get(username=username).flag
+			ret['flag']=obj.flag
 			ret['msg']= username+' login success'
 
 
