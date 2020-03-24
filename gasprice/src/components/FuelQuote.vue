@@ -4,6 +4,9 @@
   <div id="nav-bar">
     <div id="container">
       <div class="nav-brand-item"></div>
+      <span class="nav-brand-txt">
+        Fuel Quote System
+      </span>
       <div class="user-account" @click="goToProfile()"><i class="el-icon-user-solid"><span style="margin-left: 5px">Account</span></i></div>
       <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect" id="nav"
                text-color="#8f9397"
@@ -108,7 +111,7 @@
         },
         rules: {
           gallonsRequested: [
-            { required: true,  message: 'please input  Gallons Requested', trigger: 'blur' },
+            { required: true,  message: 'please enter  Gallons Requested', trigger: 'blur' },
             { type: 'number',message: 'Gallons Requested must be a positive integer', trigger: 'blur' }
           ],
           deliverDate: [
@@ -233,15 +236,21 @@
     /*font-family: "Roboto", sans-serif !important;*/
   }
   .nav-brand-item{
-    /*display: block;*/
-    background-image:url("./../../static/img/fule icon.png");
-    background-size: 60px 60px ;
+       /*display: block;*/
+       background-image:url("./../../static/img/fule icon.png");
+       background-size: 60px 60px ;
+       height: 60px;
+       width: 60px;
+       float: left;
+       margin-left: 100px;
+     }
+  .nav-brand-txt{
     height: 60px;
-    width: 60px;
+    line-height: 60px;
     float: left;
-    margin-left: 100px;
+    font-family: Trajan Pro;
+    font-weight: 600;
   }
-
   .user-account{
     height: 60px;
     width: 60px;
