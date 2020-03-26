@@ -35,7 +35,7 @@
 
          </el-col>
         </el-form-item>
-
+        <p> {{userlist}}</p>
 
         <el-form-item label="ZipCode" prop="zipcode" :label-width="formLabelWidth">
          <el-col :span="21">  <el-input v-model="userlist.zipcode" placeholder="Please enter Zipcode"></el-input></el-col>
@@ -44,7 +44,7 @@
         <el-form-item label="Password" prop="password" :label-width="formLabelWidth">
           <el-col :span="8" style="text-align: left">
             <a @click="showdialog" style="text-align: left;color: blue">change password</a>
-            <dialog-bar :show="show" :title="title" @hideModal="hideModal" @submit="submit">
+            <dialog-bar :show="show" :title="title" @hideModal="hideModal" @submit="changePassword">
               <div style="text-align: left">
                 <el-form-item label="old password" prop="password" label-width="200px" >
                   <el-input placeholder="********" v-model="userlist.oldPassword" show-password   ></el-input>
@@ -69,14 +69,14 @@
          <el-col :span="8" style="text-align: left"> 
           <el-button type="primary" @click="BacktoHome" style="text-align: left" >Back</el-button></el-col>
         <el-col :span="8" style="text-align: left">
-          <el-button type="primary" @click="EditorUserClick('userlist')" style="text-align: right">Save</el-button></el-col>
+          <el-button type="primary" @click="submit" style="text-align: right">Save</el-button></el-col>
 
         </el-form-item>
 
       </el-form>
     </div>
 
- 
+    <!-- EditorUserClick('userlist') -->
   </div>
   
 </template>
@@ -89,10 +89,20 @@
         'dialog-bar': dialogBar,
     },
     data(){
-        return{
+      return{
         title: 'Change password',
         show: false,
-        userlist: {},//用户信息表单
+        userlist: { //用户信息表单
+          userid: '',
+          address1: '',
+          address2: '',
+          city: '',
+          state: '',
+          zipcode: '',
+          oldPassword: '',
+          newPassword: '',
+          confirmPassword: '',
+        },
         formLabelWidth: "150px",
         columeTypeArr:[
           {
@@ -332,51 +342,60 @@
               "abbreviation": "WY"
           }
         ],
-
         rules: {
-        username: [{
-          required: true,
-          message: "please enter your name"
-        }],
-        address1: [{
-          required: true,
-          message: "please enter address1"
-        }],
-        address2: [{
-          required: false
-        }],
-        city: [{
-          required: true,
-          message: "please enter city"
-        }],
-        state: [{
-          required: true,
-          message: "please enter state"
-        }],
-        zipcode: [{
-          required: true,
-          message: "please enter zipcode"
-         },
-         {
-          pattern: /(^\d{5}$)|(^\d{5}-\d{4}$)/,
-          message: "number only"
-         }],
-         password: [{
-          required: true,
-          message: "please enter original password"
-         }]
-
+          username: [{
+            required: true,
+            message: "please enter your name"
+          }],
+          address1: [{
+            required: true,
+            message: "please enter address1"
+          }],
+          address2: [{
+            required: false
+          }],
+          city: [{
+            required: true,
+            message: "please enter city"
+          }],
+          state: [{
+            required: true,
+            message: "please enter state"
+          }],
+          zipcode: [{
+            required: true,
+            message: "please enter zipcode"
+          },
+          {
+            pattern: /(^\d{5}$)|(^\d{5}-\d{4}$)/,
+            message: "number only"
+          }],
+          password: [{
+            required: true,
+            message: "please enter original password"
+          }]
         }
-        }
+      }
     },
     methods:{
         hideModal() {
             // 取消弹窗回调
             this.show = false
         },
-
         submit() {
             // 确认弹窗回调
+            var userData =this.$qs.stringify ({
+              userid: this.userlist.userid,
+              address1: this.userlist.address1,
+              address2: this.userlist.address2,
+              city: this.userlist.city,
+              state: this.userlist.state,
+              zipcode: this.userlist.zipcode,
+              oldPassword: this.userlist.oldPassword,
+              newPassword: this.userlist.newPassword,
+              confirmPassword: this.userlist.confirmPassword,
+            });
+            this.$router.push('/FuelQuote')
             this.show = false
         },
         showdialog(){
@@ -384,9 +403,12 @@
         },
         BacktoHome(){
           this.$router.push('/FuelQuote')
-
         },
-
+        changePassword(){
+          if(this.userlist.newPassword && this.userlist.confirmPassword && this.userlist.confirmPassword == this.userlist.newPassword){
+            this.show=false
+          }
+        },
     }
   }
   
