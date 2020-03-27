@@ -90,7 +90,8 @@ export default {
           console.log("connect to server success");
           console.log(res.data);
           // localStorage.setItem(this.userInfo,use)
-          localStorage.setItem('userInfo',JSON.stringify(this.userInfo));
+          localStorage.setItem('username',JSON.stringify(res.data.username));
+          localStorage.setItem('password',JSON.stringify(res.data.password));
 
 
           if (res.data.code==1002){
