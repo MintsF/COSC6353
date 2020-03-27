@@ -6,3 +6,11 @@ user/__pycache__/urls.cpython-37.pyc
 fuelbackend/__pycache__/__init__.cpython-37.pyc
 
 *.pyc
+
+fuelbackend/__pycache__/
+
+user/__pycache__/
+
+user/migrations/__pycache__/
+
+fuelbackend/settings.py
