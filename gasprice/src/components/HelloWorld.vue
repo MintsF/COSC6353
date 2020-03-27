@@ -94,6 +94,7 @@
         show: false,
         userlist: { //用户信息表单
           userid: '',
+          username: '',
           address1: '',
           address2: '',
           city: '',
@@ -386,6 +387,7 @@
             // 确认弹窗回调
             var userData =this.$qs.stringify ({
               userid: this.userlist.userid,
+              username: this.userlist.username,
               address1: this.userlist.address1,
               address2: this.userlist.address2,
               city: this.userlist.city,
@@ -395,7 +397,9 @@
               newPassword: this.userlist.newPassword,
               confirmPassword: this.userlist.confirmPassword,
             });
-            this.$router.push('/FuelQuote')
+            if(this.userlist.username && this.userlist.address1 && this.userlist.city && this.userlist.state && this.userlist.zipcode){
+                this.$router.push('/FuelQuote')
+            }
             this.show = false
         },
         showdialog(){
