@@ -88,7 +88,10 @@ export default {
 
         this.$axios.post('/api/login/',postData).then(res=>{
           console.log("connect to server success");
-          console.log(res.data.code);
+          console.log(res.data);
+          // localStorage.setItem(this.userInfo,use)
+          localStorage.setItem('username',JSON.stringify(res.data.username));
+          localStorage.setItem('password',JSON.stringify(res.data.password));
 
 
           if (res.data.code==1002){

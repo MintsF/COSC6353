@@ -99,7 +99,7 @@
           password: this.userInfo.pwd,
         });
         this.$axios.post('/api/register/',postData).then(res=>{
-          // this.$router.push({path:'/login'})
+          this.$router.push({path:'/login'})
           console.log(res)
         }, function(){
           console.log("sign up can not connect to server");
