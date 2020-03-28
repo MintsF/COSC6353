@@ -68,7 +68,7 @@ from django.http import JsonResponse
 # from django.http import HttpResponse
 from django.views.decorators.http import require_http_methods
 # from django.core import serializers
-from .models import UserInfo,Profile
+from .models import UserInfo
 # from django.views.decorators.csrf import csrf_exempt
 from rest_framework.decorators import api_view
 import json
@@ -89,7 +89,9 @@ def show_info(request):
     print(request.body)
 
 
+
     username = request.POST.get("username",1)
+   
     password = request.POST.get("password",1)
     # obj=models.UserInfo.objects.get('data')
 
@@ -148,41 +150,11 @@ def register(request):
 		else:
 			ret['code']=2002
 			ret['msg']= 'username existed'
+
+
 	except Exception as e:
 		ret['code']= 2005
 		ret['msg']='can not connect to front end'
-	return JsonResponse(ret)
-
-
-@api_view(['GET'])
-def getUserProfile(request):
-	ret = {'code': 3000, 'profile': None}
-	try:
-		# print("ksdhfksjdhf")
-		username = request.POST.get('username')
-		# username="11223344"
-		# print(username)
-		# check whether exist this user
-		obj = Profile.objects.filter(username=username).count()
-		print(obj)
-		if obj == 0:
-			# test, database have no data
-			ret['profile']={
-				'address' : 'test address',
-				'city':'Houston',
-				'state':'TX',
-				'zipCode':'77077'
-			}
-		else:
-			ret['profile'] = {
-				'address': 'test address',
-				'city': 'Houston',
-				'state': 'TX',
-				'zipCode': '77077'
-			}
-	except Exception as e:
-		ret['code'] = 2005
-		ret['msg'] = 'can not connect to front end'
 	return JsonResponse(ret)
 
 

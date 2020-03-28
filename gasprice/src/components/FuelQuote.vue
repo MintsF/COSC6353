@@ -129,20 +129,15 @@
     methods:{
       getUserProfile(){
         var that = this;
-        var userInfo = localStorage.getItem('username');
-        console.log(userInfo);
-        var userName = "11223344";
-
-        var postData =this.$qs.stringify ({
-          username: '11223344',
-        });
-        this.$axios.get('/api/getUserProfile/',postData).then(function(res){
-
-//          this.$axios.get('/api/register/',postData).then(function(res){
-          console.log(res);
-//          var msg = res.data.msg;
-//          that.profile = msg.profile;
-//          that.ruleForm.deliveryAddress = that.profile.address +", "+ that.profile.city +", "+ that.profile.state +" "+ that.profile.zipCode;
+        var data = {
+          userId:this.userId,
+        }
+        var url=this.serverPrefix+"/getUserProfile";
+        this.$axios.get(url,data).then(function(res){
+//          console.log(res.data.msg);
+          var msg = res.data.msg;
+          that.profile = msg.profile;
+          that.ruleForm.deliveryAddress = that.profile.address +", "+ that.profile.city +", "+ that.profile.state +" "+ that.profile.zipCode;
         },function(){
           console.log('error');
         });
