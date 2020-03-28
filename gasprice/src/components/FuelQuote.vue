@@ -129,11 +129,14 @@
     methods:{
       getUserProfile(){
         var that = this;
-        var data = {
-          userId:this.userId,
-        }
-        var url=this.serverPrefix+"/getUserProfile";
-        this.$axios.get(url,data).then(function(res){
+        var userInfo = localStorage.getItem('username');
+        console.log(userInfo);
+        var userName = "11223344";
+//        var data = {
+//          userId:userInfo.username,
+//        }
+
+        this.$axios.get('/api/getUserProfile/',userName).then(function(res){
 //          console.log(res.data.msg);
           var msg = res.data.msg;
           that.profile = msg.profile;

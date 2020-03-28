@@ -9,6 +9,7 @@ urlpatterns = [
     url(r'show_info/$',views.show_info,),
     url(r'login/$',views.login,),
     url(r'register/$',views.register,),
+    url(r'getUserProfile/$', views.getUserProfile,),
     # url(r'login/$', views.LoginView.as_view()),
     # url(r'register$/',views.RegisterView.as_view()),
 	# path('index', views.index, name='index')
