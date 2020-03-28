@@ -69,6 +69,7 @@ from django.http import JsonResponse
 from django.views.decorators.http import require_http_methods
 # from django.core import serializers
 from .models import UserInfo,Profile,Order
+
 # from django.views.decorators.csrf import csrf_exempt
 from rest_framework.decorators import api_view
 import json
@@ -190,10 +191,46 @@ def getUserProfile(request):
 	return JsonResponse(ret)
 
 @api_view(['POST'])
+def profile(request):
+	ret ={'code': 2000, 'username':None, 'flag':None,'msg': None, 'userid': None, 'address1': None, 'address2': None, 'city': None, 'state':None, 'zipcode': None}
+	try:
+		username= request.POST.get('username')
+		print(username)
+		# fullname= request.POST.get('fullname')
+		# password = request. POST.get('password')
+		address1 = request. POST.get('address1')
+		address2 = request. POST.get('address2')
+		city = request. POST.get('city')
+		state = request. POST.get('state')
+		zipcode = request. POST.get('zipcode')
+		print('Hi, before executed Profile class')
+		obj = Profile.objects.filter(username=username).count()
+		print('Hi')
+		if obj==0:
+			newUser=Profile.objects.create(username=username,address1=address1,address2=address2,city=city,state=state,zipcode=zipcode)
+			newUser.save()
+			ret['username']=username
+			# ret['fullname']=fullname
+			ret['address1']=address1
+			ret['address2']=address2
+			ret['city']=city
+			ret['state']=state
+			ret['zipcode']=zipcode
+			ret['msg']= username+ ' profiles was successfully conducted'
+		else:
+			ret['code']=2002
+			ret['msg']= 'username existed'
+	except Exception as e:
+		ret['code'] = 2005
+		ret['msg'] = 'can not connect to front end'	
+	return JsonResponse(ret)
+	
+@api_view(['POST'])
 def submitOrder(request):
 	ret ={'code': 2000, 'username':None,  'gallonsRequested':None, 'deliveryAddress': None,'deliverDate': None,'suggestedPrice':None, 'totalAmountDue':None}
 	# try:
 	username= request.POST.get('username')
+
 
 
 	gallonsRequested = request.POST.get('gallonsRequested')
