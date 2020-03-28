@@ -4,9 +4,9 @@
       <h2 >Profile</h2>
       <el-form :model="userlist" :rules="rules" ref="EditorUserForms" label-width="300px" class="demo-ruleForm" style="margin: 0px 330px">
 
-        <!-- <el-form-item label="Full name" prop="full name" :label-width="formLabelWidth" >
-         <el-col :span="21"> <el-input v-model="userlist.fullname" placeholder="Please enter full name"></el-input></el-col>
-        </el-form-item> -->
+        <el-form-item label="Full name" prop="full name" :label-width="formLabelWidth" >
+         <el-col :span="21"> <el-input v-model="userlist.fullname" disabled></el-input></el-col>
+        </el-form-item>
 
         <el-form-item label="Full Name" prop="username" :label-width="formLabelWidth">
          <el-col :span="21">

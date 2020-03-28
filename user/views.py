@@ -68,7 +68,7 @@ from django.http import JsonResponse
 # from django.http import HttpResponse
 from django.views.decorators.http import require_http_methods
 # from django.core import serializers
-from .models import UserInfo
+from .models import UserInfo, Profile
 # from django.views.decorators.csrf import csrf_exempt
 from rest_framework.decorators import api_view
 import json
@@ -161,26 +161,25 @@ def register(request):
 
 @api_view(['POST'])
 def profile(request):
-	ret ={'code': 2000, 'username':None, 'password': None, 'flag':None,'msg': None, 'userid': None, 'address1': None, 'address2': None, 'city': None, 'state':None, 'zipcode': None}
+	ret ={'code': 2000, 'username':None, 'flag':None,'msg': None, 'userid': None, 'address1': None, 'address2': None, 'city': None, 'state':None, 'zipcode': None}
 	try:
 		username= request.POST.get('username')
-		fullname= request.POST.get('fullname')
-		password = request. POST.get('password')
+		print(username)
+		# fullname= request.POST.get('fullname')
+		# password = request. POST.get('password')
 		address1 = request. POST.get('address1')
 		address2 = request. POST.get('address2')
 		city = request. POST.get('city')
 		state = request. POST.get('state')
 		zipcode = request. POST.get('zipcode')
-		obj = UserInfo.objects.filter(username=username).count()
-		
+		print('Hi, before executed Profile class')
+		obj = Profile.objects.filter(username=username).count()
+		print('Hi')
 		if obj==0:
-			newUser=UserInfo.objects.create(username=username,password=password,flag=0)
+			newUser=Profile.objects.create(username=username,address1=address1,address2=address2,city=city,state=state,zipcode=zipcode)
 			newUser.save()
-			ret['code']=2001
-			ret['flag']=0
 			ret['username']=username
-			ret['fullname']=fullname
-			ret['password']=password
+			# ret['fullname']=fullname
 			ret['address1']=address1
 			ret['address2']=address2
 			ret['city']=city
