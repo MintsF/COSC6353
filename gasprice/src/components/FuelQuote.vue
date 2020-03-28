@@ -45,7 +45,7 @@
            </el-form-item>
            <el-form-item>
              <el-button type="success" @click="getPrice('ruleForm')">Get Price</el-button>
-             <el-button type="success" @click="submitForm('ruleForm')" disabled="disabled">Submit</el-button>
+             <el-button type="success" @click="submitForm('ruleForm')">Submit</el-button>
              <el-button @click="resetForm('ruleForm')">Reset</el-button>
            </el-form-item>
          </el-form>
@@ -109,10 +109,11 @@
           zipCode:0,
           isRequestedFuel:0
         },
+        userName:'',
         rules: {
           gallonsRequested: [
             { required: true,  message: 'please enter  Gallons Requested', trigger: 'blur' },
-            { type: 'number',message: 'Gallons Requested must be a positive integer', trigger: 'blur' }
+//            { type: 'number',  message: 'Gallons Requested must be a positive integer', trigger: 'blur' }
           ],
           deliverDate: [
             { type: 'date', required: true, message: 'please select deliver Date', trigger: 'change' }
@@ -129,14 +130,14 @@
     methods:{
       getUserProfile(){
         var that = this;
-        var data = {
-          userId:this.userId,
-        }
-        var url=this.serverPrefix+"/getUserProfile";
-        this.$axios.get(url,data).then(function(res){
-//          console.log(res.data.msg);
-          var msg = res.data.msg;
-          that.profile = msg.profile;
+        var userInfo = localStorage.getItem('username');
+        var userName = "11223344";
+        this.userName = userName;
+        var postData =this.$qs.stringify ({
+          username: '11223344',
+        });
+        this.$axios.post('/api/getUserProfile/',postData).then(function(res){
+          that.profile = res.profile;
           that.ruleForm.deliveryAddress = that.profile.address +", "+ that.profile.city +", "+ that.profile.state +" "+ that.profile.zipCode;
         },function(){
           console.log('error');
@@ -177,34 +178,55 @@
         this.ruleForm.totalAmountDue = suggestedPrice* this.ruleForm.gallonsRequested;
       },
       submitForm(formName) {
-//        this.$refs[formName].validate((valid) => {
-//          if (valid) {
-//            alert('submit!');
-//          } else {
-//            console.log('error submit!!');
-//            return false;
-//          }
-//        });
-//        console.log(formName);
+////             ruleForm: {
+//        gallonsRequested:'',
+//          deliveryAddress: '',
+//          deliverDate: '',
+//          suggestedPrice:'',
+//          totalAmountDue:''
+//      },
+        console.log("submit order")
+        var that = this;
+        var postData =this.$qs.stringify ({
+          username: that.userName,
+          gallonsRequested : that.ruleForm.gallonsRequested,
+          deliveryAddress: that.ruleForm.deliveryAddress,
+          deliverDate : that.ruleForm.deliverDate,
+          suggestedPrice :  that.ruleForm.suggestedPrice,
+          totalAmountDue : that.ruleForm.totalAmountDue
+        });
+        this.$axios.post('/api/submitOrder/',postData).then(function(res){
+          that.profile = res.profile;
+          that.ruleForm.deliveryAddress = that.profile.address +", "+ that.profile.city +", "+ that.profile.state +" "+ that.profile.zipCode;
+        },function(){
+          console.log('error');
+        });
       },
       resetForm(formName) {
         this.$refs[formName].resetFields();
       },
       getFuleQuoteHistory(){
         var that = this;
-        var data = {
-          userId:this.userId,
-          currentPage: this.currentPage
-        }
-        var url=this.serverPrefix+"/getFuelQuoteHistory";
-        this.$axios.get(url,data).then(function(res){
-//          console.log(res.data.msg);
+        var postData =this.$qs.stringify ({
+          username: '11223344',
+        });
+
+        var postData =this.$qs.stringify ({
+          username: that.userName,
+          gallonsRequested : that.ruleForm.gallonsRequested,
+          deliveryAddress: that.ruleForm.deliveryAddress,
+          deliverDate : that.ruleForm.deliverDate,
+          suggestedPrice :  that.ruleForm.suggestedPrice,
+          totalAmountDue : that.ruleForm.totalAmountDue
+        });
+        this.$axios.post('/api/orderHistory/',postData).then(function(res){
           var msg = res.data.msg;
-          that.tableData = msg.quoteList;
+          that.tableData = msg.orderList;
           that.total = msg.total;
         },function(){
           console.log('error');
         });
+
     },
 
     handleChangePage(val){

@@ -15,15 +15,13 @@ class Profile(models.Model):
 	state = models.CharField(max_length=2,null= False, blank= False)
 	zipcode = models.CharField(max_length=9, null= False, blank= False)
 
-# class Order(models.Model):
-# 	username = models.ForeignKey(to="UserInfo",to_field="username")
-# 	deliveryDate= models.DateTimeField() 
-# 	deliveryAddress = 
-# 	deliveryCity= 
-# 	deliveryState= 
-# 	deliveryZipcode=
-# 	gallons=
-# 	amount=
+class Order(models.Model):
+	username = models.CharField(max_length=8,unique=True,null= False)
+	deliveryDate = models.DateTimeField()
+	deliveryAddress = models.CharField(max_length=100, null =False, blank= False)
+	gallonsRequested= models.IntegerField(null=False,default ='0')
+	suggestedPrice= models.IntegerField(null=False,default ='0')
+	totalAmountDue = models.IntegerField(null=False,default ='0')
 	
 	
 
