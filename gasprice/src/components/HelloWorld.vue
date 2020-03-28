@@ -4,9 +4,9 @@
       <h2 >Profile</h2>
       <el-form :model="userlist" :rules="rules" ref="EditorUserForms" label-width="300px" class="demo-ruleForm" style="margin: 0px 330px">
 
-        <el-form-item label="User ID" prop="userid" :label-width="formLabelWidth" >
-         <el-col :span="21"> <el-input v-model="userlist.userid" disabled ></el-input></el-col>
-        </el-form-item>
+        <!-- <el-form-item label="Full name" prop="full name" :label-width="formLabelWidth" >
+         <el-col :span="21"> <el-input v-model="userlist.fullname" placeholder="Please enter full name"></el-input></el-col>
+        </el-form-item> -->
 
         <el-form-item label="Full Name" prop="username" :label-width="formLabelWidth">
          <el-col :span="21">
@@ -35,7 +35,7 @@
 
          </el-col>
         </el-form-item>
-        <p> {{userlist}}</p>
+        <!-- <p> {{userlist}}</p> -->
 
         <el-form-item label="ZipCode" prop="zipcode" :label-width="formLabelWidth">
          <el-col :span="21">  <el-input v-model="userlist.zipcode" placeholder="Please enter Zipcode"></el-input></el-col>
@@ -94,6 +94,7 @@
         show: false,
         userlist: { //用户信息表单
           userid: '',
+          username: '',
           address1: '',
           address2: '',
           city: '',
@@ -343,9 +344,10 @@
           }
         ],
         rules: {
-          username: [{
+        
+          fullname: [{
             required: true,
-            message: "please enter your name"
+            message: "please enter fullname"
           }],
           address1: [{
             required: true,
@@ -386,6 +388,7 @@
             // 确认弹窗回调
             var userData =this.$qs.stringify ({
               userid: this.userlist.userid,
+              username: this.userlist.username,
               address1: this.userlist.address1,
               address2: this.userlist.address2,
               city: this.userlist.city,
@@ -395,7 +398,14 @@
               newPassword: this.userlist.newPassword,
               confirmPassword: this.userlist.confirmPassword,
             });
-            this.$router.push('/FuelQuote')
+            if(this.userlist.username && this.userlist.address1 && this.userlist.city && this.userlist.state && this.userlist.zipcode){
+                this.$axios.post('/api/profile/',userData).then(res=>{
+                    console.log(res)
+                    }, function(){
+                    console.log("Can not submit profile to server");
+                    })
+                this.$router.push('/FuelQuote')
+            }
             this.show = false
         },
         showdialog(){
