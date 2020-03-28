@@ -231,8 +231,6 @@ def submitOrder(request):
 	# try:
 	username= request.POST.get('username')
 
-
-
 	gallonsRequested = request.POST.get('gallonsRequested')
 	deliveryAddress = request.POST.get('deliveryAddress')
 	deliveryDate = request.POST.get('deliveryDate')
@@ -240,7 +238,7 @@ def submitOrder(request):
 	totalAmountDue = request.POST.get('totalAmountDue')
 
 	# print(username)
-	newOrder=UserInfo.objects.create(username=username,gallonsRequested=gallonsRequested,deliveryAddress=deliveryAddress,deliveryDate=deliveryDate,suggestedPrice=suggestedPrice,totalAmountDue=totalAmountDue)
+	newOrder=Order.objects.create(username=username,gallonsRequested=gallonsRequested,deliveryAddress=deliveryAddress,deliveryDate=deliveryDate,suggestedPrice=suggestedPrice,totalAmountDue=totalAmountDue)
 	newOrder.save()
 
 
