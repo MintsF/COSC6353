@@ -26,3 +26,5 @@ user/migrations/0004_auto_20200323_1511.py
 
 .idea/
 
+
+user/migrations/

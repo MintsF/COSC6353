@@ -222,11 +222,6 @@
 
         var postData =this.$qs.stringify ({
           username: that.userName,
-          gallonsRequested : that.ruleForm.gallonsRequested,
-          deliveryAddress: that.ruleForm.deliveryAddress,
-          deliveryDate : that.ruleForm.deliveryDate,
-          suggestedPrice :  that.ruleForm.suggestedPrice,
-          totalAmountDue : that.ruleForm.totalAmountDue
         });
         this.$axios.post('/api/getOrderHistory/',postData).then(function(res){
           var msg = res.data;

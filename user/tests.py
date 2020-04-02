@@ -59,6 +59,8 @@ class RegisterModelTest(TestCase):
 		response=c.post('/api/register/',{"username":"11223344","password": "124"})
 		self.assertEqual(json.loads(response.content.decode())['code'],2002)
 
+class FuelQuoteModelTest(TestCase):
+	
 		
 
 
