@@ -67,23 +67,23 @@
           alert('userName can not be none');
             return false;
         }
-        var reg = /^[\d]+$/;
-        // var s = reg.test(name);
-        // console.log(s);
-        console.log(name.length);
-        // console.log((name>=10000000));
+        // var reg = /^[\d]+$/;
         if(name.length !=8){
           alert('user name must be 8 characters without space');
           return false;
         }
 
-
-        if(password==''&&password.trim()==password ){
+        var res=password.replace(/\s+/g,"");
+        console.log(res.length);
+        console.log(password.length);
+        if(password==''||res.length!=password.length ){
           alert('password can not be none and can not include space');
           return false;
         }
 
-        if(confirmpassword=='' && confirmpassword.trim()==confirmpassword ){
+        var res2=confirmpassword.replace(/\s+/g,"");
+
+        if(confirmpassword=='' || res2.length!=confirmpassword.length ){
           alert('confirm password can not be none and can not include space');
           return false;
         }
@@ -99,7 +99,7 @@
           password: this.userInfo.pwd,
         });
         this.$axios.post('/api/register/',postData).then(res=>{
-          // this.$router.push({path:'/login'})
+          this.$router.push({path:'/login'})
           console.log(res)
         }, function(){
           console.log("sign up can not connect to server");
