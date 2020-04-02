@@ -226,15 +226,13 @@ def getUserProfile(request):
 # 	return JsonResponse(ret)
 
 @api_view(['POST'])
-def profile(request):
-	ret={'code':3000,'userid':None,'username':None,'address1':None,'address2':None,'city':None, 'state':None,'zipcode':None, 'msg':None}
+def initprofile(request):
+	ret={'code':5000,'userid':None,'username':None,'address1':None,'address2':None,'city':None, 'state':None,'zipcode':None, 'msg':None}
 	try:
 		userid =eval(request.POST.get('userid'))
-		print(userid)
 		flag = UserInfo.objects.get(username=userid).flag
-		print(flag)
 		if flag==1:
-			ret['code']=3004
+			ret['code']=5001
 			ret['userid']=userid
 			ret['username']=Profile.objects.get(username=userid).fullname
 			ret['address1']=Profile.objects.get(username=userid).address1
@@ -243,7 +241,31 @@ def profile(request):
 			ret['state']=Profile.objects.get(username=userid).state
 			ret['zipcode']=Profile.objects.get(username=userid).zipcode
 			ret['msg']=userid+" information"
-			# return JsonResponse(ret)
+	except Exception as e:
+		ret['code']=5002
+		ret['msg']= "can not connect to front end or db error"
+	return JsonResponse(ret)
+
+
+@api_view(['POST'])
+def profile(request):
+	ret={'code':3000,'userid':None,'username':None,'address1':None,'address2':None,'city':None, 'state':None,'zipcode':None, 'msg':None}
+	try:
+		userid =eval(request.POST.get('userid'))
+		print(userid)
+		# flag = UserInfo.objects.get(username=userid).flag
+		# print(flag)
+		# if flag==1:
+		# 	ret['code']=3004
+		# 	ret['userid']=userid
+		# 	ret['username']=Profile.objects.get(username=userid).fullname
+		# 	ret['address1']=Profile.objects.get(username=userid).address1
+		# 	ret['address2']=Profile.objects.get(username=userid).address2
+		# 	ret['city']=Profile.objects.get(username=userid).city
+		# 	ret['state']=Profile.objects.get(username=userid).state
+		# 	ret['zipcode']=Profile.objects.get(username=userid).zipcode
+		# 	ret['msg']=userid+" information"
+		# 	# return JsonResponse(ret)
 		username =  request.POST.get('username')
 		print(username)
 		address1 = request.POST.get('address1')

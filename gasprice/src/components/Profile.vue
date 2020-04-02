@@ -382,7 +382,7 @@
       state: that.userlist.state,
       zipcode: that.userlist.zipcode,
       });
-      this.$axios.post('/api/profile/',postData).then(res=>{
+      this.$axios.post('/api/initProfile/',postData).then(res=>{
         console.log(res.data);
         that.userlist.userid=res.data.userid;
         that.userlist.username=res.data.username;

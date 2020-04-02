@@ -14,6 +14,7 @@ urlpatterns = [
     url(r'submitOrder/$',views.submitOrder),
     url(r'getOrderHistory/$',views.getOrderHistory),
     url(r'changepassword/$', views.changepassword,),
+    url(r'initProfile/$',views.initprofile,),
     # url(r'login/$', views.LoginView.as_view()),
     # url(r'register$/',views.RegisterView.as_view()),
 	# path('index', views.index, name='index')
