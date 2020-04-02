@@ -1,208 +1,522 @@
-<!-- <template> -->
-    <!-- <div class="username">  -->
-        <!-- <div class="input_style">	 -->
-  	      <!-- <el-input placeholder="Username" v-model="name" clearable  ></el-input> -->
-  	    <!-- </div> -->
-    <!-- </div> -->
-<!-- // </template> -->
-
-<!-- <script></script> -->
-
-<!-- <style>
-/* // .header {
-//     background-color:red;
-//     font-size: 40px;
-// } */
-/* // </style> */ -->
-
-
-
-
 <template>
-<div>
-  <div class="leftside" style="width: 30%">Hi this is leftside</div>
-  <div class="rightside" style="width: 50%">
-  	<div style="width: 25%;float: left">Hi this is rightside</div>
-  	<div class="profile" style="width: 73%;float: left">
-  	  <!-- <div class="logo"  > gas price prediction</div> -->
-  	  <h2>Create your profile!</h2>
-  	  <h5>Nice to see you! Please create your personal profile!</h5>
+  <div>
+    <div class="main-container">
+      <h2 >Profile</h2>
+      <el-form :model="userlist" :rules="rules" ref="EditorUserForms" label-width="300px" class="demo-ruleForm" style="margin: 0px 330px">
 
-  	  <div class="block1" >
-  	  	<div class="tag1" ><span style="display: line-block; vertical-align: text-bottom;"><strong>Full Name</strong></span></div>
-  	    <div class="input_style">	
-  	      <el-input placeholder="Username" v-model="name" clearable  ></el-input>
-  	    </div>
-  	  </div>
+        <el-form-item label="User ID" prop="userid" :label-width="formLabelWidth" >
+         <el-col :span="21"> <el-input v-model="userlist.userid" disabled ></el-input></el-col>
+        </el-form-item>
 
-  	  <div class="block1" >
-  	  	<div class="tag1" ><span><strong>*Password</strong></span></div>
-  	    <div class="input_style">	
-  	      <el-input placeholder="********" v-model="pwd" show-password   ></el-input>
-  	    </div>
-  	  </div>
+        <el-form-item label="Full Name" prop="username" :label-width="formLabelWidth">
+         <el-col :span="21">
+          <el-input v-model="userlist.username" ></el-input>
+          </el-col>
+        </el-form-item>
 
-      <div class="block1" >
-  	  	<div class="tag1" ><span><strong>*Address1</strong></span></div>
-  	    <div class="input_style">	
-  	      <el-input placeholder="Address1" v-model="pwd" show-password   ></el-input>
-  	    </div>
-  	  </div>
-    
-      <div class="block1" >
-  	  	<div class="tag1" ><span><strong>Address2</strong></span></div>
-  	    <div class="input_style">	
-  	      <el-input placeholder="Address2" v-model="pwd" show-password   ></el-input>
-  	    </div>
-  	  </div>
-      
-      <div class="block1" >
-  	  	<div class="tag1" ><span><strong>*City</strong></span></div>
-  	    <div class="input_style">	
-  	      <el-input placeholder="City" v-model="pwd" show-password   ></el-input>
-  	    </div>
-  	  </div>
-      
-      <div class="block1" >
-  	  	<div class="tag1" ><span><strong>*State</strong></span></div>
-  	    <div class="input_style">	
-  	      <el-input placeholder="State" v-model="pwd" show-password   ></el-input>
-  	    </div>
-  	  </div>
+        <el-form-item label="Address1" prop="address1" :label-width="formLabelWidth">
+         <el-col :span="21">  <el-input v-model="userlist.address1" placeholder="Please enter address required"></el-input></el-col>
+        </el-form-item>
 
-      <div class="block1" >
-  	  	<div class="tag1" ><span><strong>*Zipcode</strong></span></div>
-  	    <div class="input_style">	
-  	      <el-input placeholder="Zipcode" v-model="pwd" show-password   ></el-input>
-  	    </div>
-  	  </div>
+        <el-form-item label="Address2" prop="address2" :label-width="formLabelWidth">
+         <el-col :span="21">  <el-input v-model="userlist.address2" placeholder="Please enter address optional"></el-input></el-col>
+        </el-form-item>
+
+        <el-form-item label="City" prop="city" :label-width="formLabelWidth">
+         <el-col :span="21">  <el-input v-model="userlist.city" placeholder="Please enter city"></el-input></el-col>
+        </el-form-item>
+
+        <el-form-item label="State" prop="state" :label-width="formLabelWidth">
+         <el-col :span="8">  
+         <el-select v-model="userlist.state" placeholder="Please select one ">
+           <el-option v-for="(item,index) in columeTypeArr" :key="index" :label="item.label" :value="item.value">
+           </el-option>
+         </el-select>
+
+         </el-col>
+        </el-form-item>
 
 
+        <el-form-item label="ZipCode" prop="zipcode" :label-width="formLabelWidth">
+         <el-col :span="21">  <el-input v-model="userlist.zipcode" placeholder="Please enter Zipcode"></el-input></el-col>
+        </el-form-item>
+
+        <el-form-item label="Password"  :label-width="formLabelWidth">
+          <el-col :span="8" style="text-align: left">
+            <a @click="showdialog" style="text-align: left;color: blue">change password</a>
+            <dialog-bar :show="show" :title="title" @hideModal="hideModal" @submit="submit">
+              <div style="text-align: left;">
+                <el-form-item label="old password"  label-width="200px" >
+                  <el-input placeholder="********" v-model="userlist.oldPassword" show-password   ></el-input>
+                </el-form-item>
+
+                <el-form-item label="new password"  label-width="200px">
+                  <el-input placeholder="********" v-model="userlist.newPassword" show-password   ></el-input>
+                </el-form-item>
+
+                <el-form-item label="confirm password"  label-width="200px">
+                  <el-input placeholder="********" v-model="userlist.confirmPassword" show-password   ></el-input>
+                </el-form-item>
+              </div>
 
 
+            </dialog-bar>
 
+          </el-col>
+        </el-form-item>
 
-      <div >
-        <el-button type="primary" @click="login" class="login_style">Submit</el-button>
-      </div>
-      <!-- <div>
-        <div class="tag2"><a href="" style="color: gray">forget password</a></div>
-        <div class="tag2"><a href="" style="color: gray">Sign Up</a></div>
-      </div> -->
-    </div> 	
+        <el-form-item >
+         <el-col :span="8" style="text-align: left"> 
+          <el-button type="primary" @click="BacktoHome" style="text-align: left" >Back</el-button></el-col>
+        <el-col :span="8" style="text-align: left">
+          <el-button type="primary" @click="EditorUserClick('userlist')" style="text-align: right">Save</el-button></el-col>
+
+        </el-form-item>
+
+      </el-form>
+    </div>
+
+ 
   </div>
-</div>
-
+  
 </template>
 
-<script>
+<script >
+  import dialogBar from './dialog.vue'
 
-  export default {
-    name: "Profile",
-    editProfile(){
-      return {
-        name: '',
-        pwd : ''   
-      }
+  export default{
+       components:{
+        'dialog-bar': dialogBar,
     },
+    data(){
+        return{
+        title: 'Change password',
+        show: false,
+        userlist: {
+          userid: '',
+          username: '',
+          address1: '',
+          address2: '',
+          city: '',
+          state: '',
+          zipcode: '',
+          oldPassword: '',
+          newPassword: '',
+          confirmPassword: '',
+        },//用户信息表单
+        formLabelWidth: "150px",
+        columeTypeArr:[{
+              value: "AL",
+              label: "AL"
+          },
+          {
+              value: "AK",
+              label: "AK"
+          },
+          {
+              value: "AS",
+              label: "AS"
+          },
+          {
+              value: "AZ",
+              label: "AZ"
+          },
+          {
+              value: "AR",
+              label: "AR"
+          },
+          {
+              value: "CA",
+              label: "CA"
+          },
+          {
+              value: "CO",
+              label: "CO"
+          },
+          {
+              value: "CT",
+              label: "CT"
+          },
+          {
+              value: "DE",
+              label: "DE"
+          },
+          {
+              value: "DC",
+              label: "DC"
+          },
+          {
+              value: "FM",
+              label: "FM"
+          },
+          {
+              value: "FL",
+              label: "FL"
+          },
+          {
+              value: "GA",
+              label: "GA"
+          },
+          {
+              value: "GU",
+              label: "GU"
+          },
+          {
+              value: "HI",
+              label: "HI"
+          },
+          {
+              value: "ID",
+              label: "ID"
+          },
+          {
+              value: "IL",
+              label: "IL"
+          },
+          {
+              value: "IN",
+              label: "IN"
+          },
+          {
+              value: "IA",
+              label: "IA"
+          },
+          {
+              value: "KS",
+              label: "KS"
+          },
+          {
+              value: "KY",
+              label: "KY"
+          },
+          {
+              value: "LA",
+              label: "LA"
+          },
+          {
+              value: "ME",
+              label: "ME"
+          },
+          {
+              value: "MH",
+              label: "MH"
+          },
+          {
+              value: "M",
+              label: "MD"
+          },
+          {
+              value: "MA",
+              label: "MA"
+          },
+          {
+              value: "MI",
+              label: "MI"
+          },
+          {
+              value: "MN",
+              label: "MN"
+          },
+          {
+              value: "MS",
+              label: "MS"
+          },
+          {
+              value: "MO",
+              label: "MO"
+          },
+          {
+              value: "MT",
+              label: "MT"
+          },
+          {
+              value: "NE",
+              label: "NE"
+          },
+          {
+              value: "NV",
+              label: "NV"
+          },
+          {
+              value: "NH",
+              label: "NH"
+          },
+          {
+              value: "NJ",
+              label: "NJ"
+          },
+          {
+              value: "NM",
+              label: "NM"
+          },
+          {
+              value: "NY",
+              label: "NY"
+          },
+          {
+              value: "NC",
+              label: "NC"
+          },
+          {
+              value: "ND",
+              label: "ND"
+          },
+          {
+              value: "MP",
+              label: "MP"
+          },
+          {
+              value: "OH",
+              label: "OH"
+          },
+          {
+              value: "OK",
+              label: "OK"
+          },
+          {
+              value: "OR",
+              label: "OR"
+          },
+          {
+              value: "PW",
+              label: "PW"
+          },
+          {
+              value: "PA",
+              label: "PA"
+          },
+          {
+              value: "PR",
+              label: "PR"
+          },
+          {
+              value: "RI",
+              label: "RI"
+          },
+          {
+              value: "SC",
+              label: "SC"
+          },
+          {
+              value: "SD",
+              label: "SD"
+          },
+          {
+              value: "TN",
+              label: "TN"
+          },
+          {
+              value: "TX",
+              label: "TX"
+          },
+          {
+              value: "UT",
+              label: "UT"
+          },
+          {
+              value: "VT",
+              label: "VT"
+          },
+          {
+              value: "VI",
+              label: "VI"
+          },
+          {
+              value: "VA",
+              label: "VA"
+          },
+          {
+              value: "WA",
+              label: "WA"
+          },
+          {
+              value: "WV",
+              label: "WV"
+          },
+          {
+              value: "WI",
+              label: "WI"
+          },
+          {
+              value: "WY",
+              label: "WY"
+          }],
+
+        rules: {
+        username: [{
+          required: true,
+          message: "please enter your name"
+        }],
+        address1: [{
+          required: true,
+          message: "please enter address1"
+        }],
+        address2: [{
+          required: false
+        }],
+        city: [{
+          required: true,
+          message: "please enter city"
+        }],
+        state: [{
+          required: true,
+          message: "please enter state"
+        }],
+        zipcode: [{
+          required: true,
+          message: "please enter zipcode"
+         }],
+
+        }
+        }
+    },
+    created: function(){
+      var that= this;
+      that.userlist.userid=localStorage.getItem('username');
+      var postData = this.$qs.stringify({
+      userid: that.userlist.userid,
+      username: that.userlist.username,
+      address1: that.userlist.address1,
+      address2: that.userlist.address2,
+      city: that.userlist.city,
+      state: that.userlist.state,
+      zipcode: that.userlist.zipcode,
+      });
+      this.$axios.post('/api/profile/',postData).then(res=>{
+        console.log(res.data);
+        that.userlist.userid=res.data.userid;
+        that.userlist.username=res.data.username;
+        that.userlist.address1=res.data.address1;
+        that.userlist.address2=res.data.address2;
+        that.userlist.city=res.data.city;
+        that.userlist.state=res.data.state;
+        that.userlist.zipcode=res.data.zipcode;
+      }).catch((err)=>{
+        console.log("can not connec to server")
+      })
+
+
+    },
+
     methods:{
-      fileCreate(){
-        
-      }
+        hideModal() {
+            // 取消弹窗回调
+            this.oldPassword='';
+            this.newPassword='';
+            this.confirmPassword='';
+            this.show = false
+        },
+
+        submit() {
+            // 确认弹窗回调
+            
+            var userInfo = localStorage.getItem('username');
+
+            this.userlist.userid=userInfo;
+             console.log(userInfo)
+            if(this.userlist.oldPassword==''){
+              alert("please input the old password")
+              return false;
+            }
+            if (this.userlist.newPassword==''||this.userlist.confirmPassword==''){
+              alert("new password and confirmPassword can not be none");
+              return false;
+            }
+
+            if(this.userlist.newPassword!=this.userlist.confirmPassword){
+              alert("password do not match")
+              return false;
+            }
+
+            var postData =this.$qs.stringify ({
+              username: userInfo,
+                // oldpassword: this.userlist.password,
+              password: this.userlist.oldPassword,
+              newPassword: this.userlist.newPassword,
+            });
+            this.$axios.post('/api/changepassword/',postData).then(res=>{
+              console.log("connect to the server success");
+              console.log(res.data);
+              if (res.data.code==4001){
+                alert(res.data.msg)
+              }
+              if (res.data.code==4002){
+                console.log(res.data.msg)
+                this.show = false
+
+              }
+              
+
+              }).catch((err)=>{
+                console.log("can not connect to the server")
+              })
+            
 
 
+        },
+        showdialog(){
+          this.show=true
+        },
+        BacktoHome(){
+          this.$router.push('/FuelQuote')
+
+        },
+        EditorUserClick(formName){
+          var that= this;
+          that.userlist.userid = localStorage.getItem('username');
+          console.log(that.userlist.address1)
+          if(that.userlist.username==''){
+            alert("full name can not be none or no more than 50 characters");
+            return false;
+          }
+
+          if(that.userlist.address1==''){
+            alert("address1 can not be none or no more than 100 characters");
+            return false;
+          }
+
+          if(that.userlist.city==''){
+            alert("please enter your city");
+            return false;
+          }
+          if (that.userlist.state==''){
+            alert("please enter your state");
+            return false;
+          }
+          console.log(that.userlist.zipcode.length);
+          if(that.userlist.zipcode.length<5|| that.userlist.zipcode.length>9){
+            alert("please enter at least 5 characters of zipcode and no more than 9 characters");
+            return false;
+          }
+          var postData = this.$qs.stringify({
+            userid: that.userlist.userid,
+            username: that.userlist.username,
+            address1: that.userlist.address1,
+            address2: that.userlist.address2,
+            city: that.userlist.city,
+            state: that.userlist.state,
+            zipcode: that.userlist.zipcode,
+          });
+          this.$axios.post('/api/profile/',postData).then(res=>{
+            console.log(res.data)
+          }).catch((err)=>{
+            console.log("can not connec to server")
+          })
+
+          
+
+        }
 
     }
   }
+  
 </script>
 
-<style>
-  .leftside{
-  	/*border-style: solid;*/
-	/*border-width: 5px;*/
-  	/*border-color: red;*/
-  	float: left;
-  	/*height: auto;*/
-  	display: flex;
-    min-height: 150vh;
-    flex-direction: column;
+<style type="text/css">
 
-    background: linear-gradient(#97C74F,#2BB9A5);
-
+  .el-button--primary{
+    font-family: "Roboto", sans-serif;
+    font-weight: 600;
+    background:linear-gradient(150deg,  #97c74e 0%, #2ab9a5 100%);
   }
-  .rightside{
-	width: 70%;
-	float: left;
-/*	border-style: solid;
-	border-width: 5px;*/
-	/*display: flex;*/
-    min-height: 100vh;
-    flex-direction: column;
-
-  }
-
-  .profile{
-/*  	border-style: solid;
-	border-width: 2px;
-	border-color: red;*/
-	margin-top: 100px;
-
-	text-align: center;
-	vertical-align: center;
-/*	min-height: 100vh;
-    flex-direction: column;*/
-  }
-
-  .logo{
-  	font-family: "DejaVu Sans Mono";
-  	color: lightgreen;
-  	text-align: center;
-  	font-size: 30px;
-    margin-top: 50px;
-  }
-  .block1{
-  	width: 60%;
-  	display:inline-block;
-  	text-align: center;
-/*  	border-style: solid;
-	border-width: 2px;
-	border-color: yellow;
-	float: center;*/
-	margin-bottom: 20px;
-  }
-  .tag1{
-  	width:fit-content;
-
-
-  	/*text-align: center;*/
-  	/*display:inline-block;*/
-    height: 30px;
-/*    border-style: solid;
-	border-width: 2px;
-	border-color: yellow;*/
-
-  }
-  .input_style{
-    width: auto;
-    height: auto;
-    color: #495057;
-    background-color: #ffffff;
-    border: 2px solid #dfe2e5;
-    border-radius: 3px;
-    box-shadow: 0 0 15px lightgreen;
-    /*transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;*/
-
-  }
-  .login_style{
-    /*width: 300px;*/
-    background-color: lightgreen;
-  }
-  .tag2{
-  	height: auto;
-  	margin-top: 10px;
-  }
-
 </style>
-
-
-

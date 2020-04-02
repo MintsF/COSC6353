@@ -7,7 +7,8 @@ class UserInfo(models.Model):
 	flag = models.IntegerField(null=False,default ='0')
 
 class Profile(models.Model):
-	username= models.OneToOneField(UserInfo, on_delete=models.CASCADE,unique=True)
+	# username= models.OneToOneField(UserInfo, on_delete=models.CASCADE,unique=True)
+	username= models.CharField(max_length=8,unique=True);
 	fullname= models.CharField(max_length=50, null =False, blank= False)
 	address1 =models.CharField(max_length=100, null =False, blank= False)
 	address2= models.CharField(max_length=100, null = True)

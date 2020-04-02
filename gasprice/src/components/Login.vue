@@ -88,14 +88,18 @@ export default {
 
         this.$axios.post('/api/login/',postData).then(res=>{
           console.log("connect to server success");
-          console.log(res.data.code);
+          console.log(res.data);
+          localStorage.setItem('username',JSON.stringify(res.data.username));
 
 
           if (res.data.code==1002){
             if(res.data.flag!=0)
               this.$router.push('/FuelQuote')
             else
-              this.$router.push('/HelloWorld')
+              this.$router.push('/Profile')
+          }else if (res.data.code ==1001){
+            alert("username or password error")
+            return false;
           }
 
         }).catch((err)=>{

@@ -190,39 +190,124 @@ def getUserProfile(request):
 	# 	ret['msg'] = 'can not connect to front end'
 	return JsonResponse(ret)
 
+# @api_view(['POST'])
+# def profile(request):
+# 	ret ={'code': 2000, 'username':None, 'flag':None,'msg': None, 'userid': None, 'address1': None, 'address2': None, 'city': None, 'state':None, 'zipcode': None}
+# 	try:
+# 		username= request.POST.get('username')
+# 		print(username)
+# 		# fullname= request.POST.get('fullname')
+# 		# password = request. POST.get('password')
+# 		address1 = request. POST.get('address1')
+# 		address2 = request. POST.get('address2')
+# 		city = request. POST.get('city')
+# 		state = request. POST.get('state')
+# 		zipcode = request. POST.get('zipcode')
+# 		print('Hi, before executed Profile class')
+# 		obj = Profile.objects.filter(username=username).count()
+# 		print('Hi')
+# 		if obj==0:
+# 			newUser=Profile.objects.create(username=username,address1=address1,address2=address2,city=city,state=state,zipcode=zipcode)
+# 			newUser.save()
+# 			ret['username']=username
+# 			# ret['fullname']=fullname
+# 			ret['address1']=address1
+# 			ret['address2']=address2
+# 			ret['city']=city
+# 			ret['state']=state
+# 			ret['zipcode']=zipcode
+# 			ret['msg']= username+ ' profiles was successfully conducted'
+# 		else:
+# 			ret['code']=2002
+# 			ret['msg']= 'username existed'
+# 	except Exception as e:
+# 		ret['code'] = 2005
+# 		ret['msg'] = 'can not connect to front end'	
+# 	return JsonResponse(ret)
+
 @api_view(['POST'])
 def profile(request):
-	ret ={'code': 2000, 'username':None, 'flag':None,'msg': None, 'userid': None, 'address1': None, 'address2': None, 'city': None, 'state':None, 'zipcode': None}
+	ret={'code':3000,'userid':None,'username':None,'address1':None,'address2':None,'city':None, 'state':None,'zipcode':None, 'msg':None}
 	try:
-		username= request.POST.get('username')
+		userid =eval(request.POST.get('userid'))
+		print(userid)
+		flag = UserInfo.objects.get(username=userid).flag
+		print(flag)
+		if flag==1:
+			ret['code']=3004
+			ret['userid']=userid
+			ret['username']=Profile.objects.get(username=userid).fullname
+			ret['address1']=Profile.objects.get(username=userid).address1
+			ret['address2']=Profile.objects.get(username=userid).address2
+			ret['city']=Profile.objects.get(username=userid).city
+			ret['state']=Profile.objects.get(username=userid).state
+			ret['zipcode']=Profile.objects.get(username=userid).zipcode
+			ret['msg']=userid+" information"
+			# return JsonResponse(ret)
+		username =  request.POST.get('username')
 		print(username)
-		# fullname= request.POST.get('fullname')
-		# password = request. POST.get('password')
-		address1 = request. POST.get('address1')
-		address2 = request. POST.get('address2')
-		city = request. POST.get('city')
-		state = request. POST.get('state')
-		zipcode = request. POST.get('zipcode')
-		print('Hi, before executed Profile class')
-		obj = Profile.objects.filter(username=username).count()
-		print('Hi')
+		address1 = request.POST.get('address1')
+		print(address1)
+		address2 = request.POST.get('address2')
+		print(address2)
+		city = request.POST.get('city')
+		print(city)
+		state = request.POST.get('state')
+		print(state)
+		zipcode=request.POST.get('zipcode')
+		print(zipcode)
+		obj=Profile.objects.filter(username=userid).count()
+		print(obj)
+
+
+
 		if obj==0:
-			newUser=Profile.objects.create(username=username,address1=address1,address2=address2,city=city,state=state,zipcode=zipcode)
-			newUser.save()
+			newProfile= Profile.objects.create(username=userid,fullname=username,address1=address1,address2=address2,city=city,state=state,zipcode=zipcode)
+			newProfile.save()
+			UserInfo.objects.filter(username=userid).update(flag=1)
+			ret['code']=3001
+			ret['msg']=username+  "profile completed"
+			ret['userid']=userid
 			ret['username']=username
-			# ret['fullname']=fullname
-			ret['address1']=address1
-			ret['address2']=address2
-			ret['city']=city
-			ret['state']=state
-			ret['zipcode']=zipcode
-			ret['msg']= username+ ' profiles was successfully conducted'
 		else:
-			ret['code']=2002
-			ret['msg']= 'username existed'
+			ret['code']=3002
+			ret['msg']= userid+" information update success"
+			ret['userid']= userid
+			Profile.objects.filter(username=userid).update(fullname=username,address1=address1,address2=address2,city=city,state=state,zipcode=zipcode)
+			ret['username']=Profile.objects.get(username=userid).fullname
+			ret['address1']=Profile.objects.get(username=userid).address1
+			ret['address2']=Profile.objects.get(username=userid).address2
+			ret['city']=Profile.objects.get(username=userid).city
+			ret['state']=Profile.objects.get(username=userid).state
+			ret['zipcode']=Profile.objects.get(username=userid).zipcode
 	except Exception as e:
-		ret['code'] = 2005
-		ret['msg'] = 'can not connect to front end'	
+		ret['code']=3003
+		ret['msg']= "can not connect to front end or db error"
+	return JsonResponse(ret)
+
+@api_view(['POST'])
+def changepassword(request):
+	ret={'code': 4000, 'username': None, 'password': None, 'msg': None}
+	try:
+		username = eval(request.POST.get('username'))
+		oldPassword = request.POST.get('password')
+		newPassword = request.POST.get('newPassword')
+		obj =  UserInfo.objects.filter(username=username,password=oldPassword).count()
+		print(obj)
+		if obj==0:
+			ret['code']=4001
+			ret['username']=username
+			ret['msg']="password is not correct"
+		elif obj==1:
+			UserInfo.objects.filter(username=username).update(password=newPassword)
+
+			ret['code']=4002
+			ret['username']=username
+			ret['msg']=username +" password change success"
+			ret['password']= newPassword
+	except Exception as e:
+		ret['code']=4003
+		ret['msg']=" can not connect to front end or db error"
 	return JsonResponse(ret)
 	
 @api_view(['POST'])
