@@ -166,12 +166,12 @@ def getUserProfile(request):
 	username = request.POST.get('username')
 	print(username)
 	# check whether exist this user
-	obj = Profile.objects.filter( id = username)
+	obj = Profile.objects.filter( fullname = username)
 	print(obj)
 	if obj.count() == 0:
 		# test, database have no data
 		ret['profile']={
-			'address1' : 'test address',
+			'address1' : 'no address',
 			'address2':'',
 			'city':'Houston',
 			'state':'TX',
@@ -230,14 +230,14 @@ def submitOrder(request):
 	ret ={'code': 2000, 'username':None,  'gallonsRequested':None, 'deliveryAddress': None,'deliverDate': None,'suggestedPrice':None, 'totalAmountDue':None}
 	# try:
 	username= request.POST.get('username')
-
 	gallonsRequested = request.POST.get('gallonsRequested')
 	deliveryAddress = request.POST.get('deliveryAddress')
 	deliveryDate = request.POST.get('deliveryDate')
+	print(deliveryDate)
 	suggestedPrice = request.POST.get('suggestedPrice')
 	totalAmountDue = request.POST.get('totalAmountDue')
 
-	# print(username)
+	print(username)
 	newOrder=Order.objects.create(username=username,gallonsRequested=gallonsRequested,deliveryAddress=deliveryAddress,deliveryDate=deliveryDate,suggestedPrice=suggestedPrice,totalAmountDue=totalAmountDue)
 	newOrder.save()
 
@@ -248,12 +248,16 @@ def submitOrder(request):
 	return JsonResponse(ret)
 
 @api_view(['POST'])
-def orderHistory(request):
-	ret ={'code': 2000, 'orderList':None,}
+def getOrderHistory(request):
+	ret ={'code': 2000, 'total':None,'orderList':[],}
 	# try:
 	username= request.POST.get('username')
+	print(username)
 	obj = Order.objects.filter(username = username)
-	if(obj.count == 0):
+	# print(obj.values())
+	# print(obj.count())
+	ret['total'] = obj.count()
+	if(obj.count() == 0):
 		ret['orderList'] = {
 			'gallonsRequested': 0,
 			'deliveryAddress':"00",
@@ -262,13 +266,18 @@ def orderHistory(request):
 			'totalAmountDue': 0
 		}
 	else:
-		ret['orderList'] = {
-			'gallonsRequested': obj.gallonsRequested,
-			'deliveryAddress': obj.deliveryAddress,
-			'deliveryDate': obj.deliveryDate,
-			'suggestedPrice': obj.suggestedPrice,
-			'totalAmountDue': obj.totalAmountDue
-		}
+		i=0
+		for order in obj:
+			print(order)
+			i=i+1
+			print(i)
+			ret['orderList'].append({
+				'gallonsRequested': order.gallonsRequested,
+				'deliveryAddress': order.deliveryAddress,
+				'deliveryDate': order.deliveryDate,
+				'suggestedPrice': order.suggestedPrice,
+				'totalAmountDue': order.totalAmountDue
+			})
 
 
 	# except Exception as e:

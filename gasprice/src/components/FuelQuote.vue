@@ -29,8 +29,8 @@
              <el-col :span="21"><el-input v-model="ruleForm.gallonsRequested" placeholder="please input  Gallons Requested"></el-input></el-col>
              <el-col :span="1">Gal.</el-col>
            </el-form-item>
-           <el-form-item label=" Deliver Date" required prop="deliverDate">
-             <el-date-picker type="date" placeholder="please select deliver Date" v-model="ruleForm.deliverDate" style="width: 100%;"></el-date-picker>
+           <el-form-item label=" Deliver Date" required prop="deliveryDate">
+             <el-date-picker type="date"  @change="dateChange" value-format="yyyy-MM-dd"  placeholder="please select delivery Date" v-model="ruleForm.deliveryDate" style="width: 100%;"></el-date-picker>
            </el-form-item>
            <el-form-item label=" Delivery Address"  prop="deliveryAddress" >
              <el-input v-model="ruleForm.deliveryAddress" placeholder="please input delivery address" readonly="readonly"></el-input>
@@ -54,7 +54,7 @@
         <h2>Fuel Quote History</h2>
         <template>
           <el-table :data="tableData" stripe style="width: 100%; padding: 10px 0px" >
-            <el-table-column prop="orderDate" label="Orde Date" width="180"></el-table-column>
+            <!-- <el-table-column prop="orderDate" label="Orde Date" width="180"></el-table-column> -->
             <el-table-column prop="gallonsRequested" label="Gallons Requested" width="180"></el-table-column>
             <el-table-column prop="deliveryAddress" label="Delivery Address"  ></el-table-column>
             <el-table-column prop="deliveryDate" label="Delivery Date" width="180"></el-table-column>
@@ -97,7 +97,7 @@
         ruleForm: {
           gallonsRequested:'',
           deliveryAddress: '',
-          deliverDate: '',
+          deliveryDate: '',
           suggestedPrice:'',
           totalAmountDue:''
         },
@@ -115,7 +115,7 @@
             { required: true,  message: 'please enter  Gallons Requested', trigger: 'blur' },
 //            { type: 'number',  message: 'Gallons Requested must be a positive integer', trigger: 'blur' }
           ],
-          deliverDate: [
+          deliveryDate: [
             { type: 'date', required: true, message: 'please select deliver Date', trigger: 'change' }
           ],
 
@@ -131,14 +131,16 @@
       getUserProfile(){
         var that = this;
         var userInfo = localStorage.getItem('username');
-        var userName = "11223344";
-        this.userName = userName;
+        console.log("userInfo: "+ userInfo);
+        // var userName = "11223344";
+        this.userName = userInfo;
         var postData =this.$qs.stringify ({
-          username: '11223344',
+          username:  that.userName,
         });
         this.$axios.post('/api/getUserProfile/',postData).then(function(res){
-          that.profile = res.profile;
-          that.ruleForm.deliveryAddress = that.profile.address +", "+ that.profile.city +", "+ that.profile.state +" "+ that.profile.zipCode;
+         console.log(res.data);
+         that.profile = res.data.profile;
+          that.ruleForm.deliveryAddress = that.profile.address1 +that.profile.address2+", "+ that.profile.city +", "+ that.profile.state +" "+ that.profile.zipCode;
         },function(){
           console.log('error');
         });
@@ -154,6 +156,11 @@
              this.getFuleQuoteHistory();
           }
 //        console.log(key, keyPath);
+      },
+      dateChange(val){
+        // console.log(val);
+        this.ruleForm.deliveryDate = val;
+        console.log(this.ruleForm.deliveryDate );
       },
       getPrice(){
         var locationFactor=0.04;
@@ -171,7 +178,7 @@
         if(this.ruleForm.gallonsRequested >=1000){
           gallonsRequestedFactor = 0.02
         }
-//        if(ruleForm.deliverDate)
+//        if(ruleForm.deliveryDate)
         var margin = currentPrice * (locationFactor - rateHistoryFactor + gallonsRequestedFactor + companyProfitFactor + rateFluctuation)
         var suggestedPrice = currentPrice + margin;
         this.ruleForm.suggestedPrice = suggestedPrice;
@@ -187,17 +194,21 @@
 //      },
         console.log("submit order")
         var that = this;
+        console.log("ddsd"+that.userName);
+        console.log(this.ruleForm);
         var postData =this.$qs.stringify ({
           username: that.userName,
           gallonsRequested : that.ruleForm.gallonsRequested,
           deliveryAddress: that.ruleForm.deliveryAddress,
-          deliverDate : that.ruleForm.deliverDate,
+          deliveryDate : that.ruleForm.deliveryDate,
           suggestedPrice :  that.ruleForm.suggestedPrice,
           totalAmountDue : that.ruleForm.totalAmountDue
         });
         this.$axios.post('/api/submitOrder/',postData).then(function(res){
-          that.profile = res.profile;
-          that.ruleForm.deliveryAddress = that.profile.address +", "+ that.profile.city +", "+ that.profile.state +" "+ that.profile.zipCode;
+          // that.profile = res.profile;
+          // that.ruleForm.deliveryAddress = that.profile.address +", "+ that.profile.city +", "+ that.profile.state +" "+ that.profile.zipCode;
+
+
         },function(){
           console.log('error');
         });
@@ -207,21 +218,21 @@
       },
       getFuleQuoteHistory(){
         var that = this;
-        var postData =this.$qs.stringify ({
-          username: '11223344',
-        });
+        console.log(that.userName);
 
         var postData =this.$qs.stringify ({
           username: that.userName,
           gallonsRequested : that.ruleForm.gallonsRequested,
           deliveryAddress: that.ruleForm.deliveryAddress,
-          deliverDate : that.ruleForm.deliverDate,
+          deliveryDate : that.ruleForm.deliveryDate,
           suggestedPrice :  that.ruleForm.suggestedPrice,
           totalAmountDue : that.ruleForm.totalAmountDue
         });
-        this.$axios.post('/api/orderHistory/',postData).then(function(res){
-          var msg = res.data.msg;
+        this.$axios.post('/api/getOrderHistory/',postData).then(function(res){
+          var msg = res.data;
+          console.log(res);
           that.tableData = msg.orderList;
+          console.log(that.tableData)
           that.total = msg.total;
         },function(){
           console.log('error');

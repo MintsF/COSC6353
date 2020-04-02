@@ -16,12 +16,12 @@ class Profile(models.Model):
 	zipcode = models.CharField(max_length=9, null= False, blank= False)
 
 class Order(models.Model):
-	username = models.CharField(max_length=8,unique=True,null= False)
+	username = models.CharField(max_length=100,null= False)
 	deliveryDate = models.DateTimeField()
 	deliveryAddress = models.CharField(max_length=100, null =False, blank= False)
 	gallonsRequested= models.IntegerField(null=False,default ='0')
-	suggestedPrice= models.IntegerField(null=False,default ='0')
-	totalAmountDue = models.IntegerField(null=False,default ='0')
+	suggestedPrice= models.FloatField(null=False,default ='0')
+	totalAmountDue = models.FloatField(null=False,default ='0')
 	
 	
 
