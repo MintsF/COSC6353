@@ -110,8 +110,8 @@ class ProfileModelTest(TestCase):
 
 class FuelQuoteModelTest(TestCase):
 	def setUp(self):
-		UserInfo.objects.create(username='11223344', password='123')
-		Profile.objects.create(id=1, username='11223344', fullname='tom', address1='test address1',address2='test address2',city='test city',state='test state',zipcode='test zipcode')
+		UserInfo.objects.create(username='11223344', password='123',flag=1)
+		Profile.objects.create(username='11223344', fullname='tom', address1='test address1',address2='test address2',city='test city',state='CA',zipcode='33333')
 	
 	def testGetUserProfileUrl(self):
 		c=Client()
@@ -120,28 +120,29 @@ class FuelQuoteModelTest(TestCase):
 	
 	def testGetUserProfile(self):
 		c=Client()
-		UserInfo.objects.create(username= '11223344', password="123")
+		# UserInfo.objects.create(username= '11223344', password="123")
 		response=c.post('/api/login/',{"username":"11223344","password":"123"})
 		self.assertEqual(json.loads(response.content.decode())['flag'],1)
-		response=c.post('/api/getUserProfile/',{"userid":"\"11223344\""})
+		response=c.post('/api/getUserProfile/',{"username":"\"11223344\""})
 		self.assertEqual(json.loads(response.content.decode())['code'],3001)
 
-    def testGetUserProfileUrl(self):
+	def testGetUserProfileUrl(self):
 		c=Client()
 		response= c.post('/api/submitOrder/',{"username":"11223344"})
 		self.assertEqual(response.status_code,200)
 
 	def testSubmitOrder(self):
 		c= Client()
-		response=c.post('/api/submitOrder/',{"username":"11223355","fullname":"Mike","address1":"North Stadium", "address2":"3333","city":"Houston", "state":"TX","zipcode":"77700"})
+		# response=c.post('/api/submitOrder/',{"username":"11223355","fullname":"Mike","address1":"North Stadium", "address2":"3333","city":"Houston", "state":"TX","zipcode":"77700"})
+		response=c.post('/api/submitOrder/',{"username":"11223355","gallonsRequested":5,"deliveryAddress":"North Stadium", "deliveryDate":"2020-04-03 00:00:00","suggestedPrice":0.5, "totalAmountDue":10.6})
 		# newOrder=Order.objects.create(username=username,gallonsRequested=gallonsRequested,deliveryAddress=deliveryAddress,deliveryDate=deliveryDate,suggestedPrice=suggestedPrice,totalAmountDue=totalAmountDue)
 		self.assertEqual(json.loads(response.content.decode())['code'],2001)
-		self.assertEqual(json.loads(response.content.decode())['username'],"Mike")
-		self.assertEqual(json.loads(response.content.decode())['address1'],"North Stadium")
-		self.assertEqual(json.loads(response.content.decode())['address2'],"3333")
-		self.assertEqual(json.loads(response.content.decode())['city'],"Houston")
-		self.assertEqual(json.loads(response.content.decode())['state'],"TX")
-		self.assertEqual(json.loads(response.content.decode())['zipcode'],"77700")
+		self.assertEqual(json.loads(response.content.decode())['username'],"11223355")
+		self.assertEqual(json.loads(response.content.decode())['gallonsRequested'],"5")
+		self.assertEqual(json.loads(response.content.decode())['deliveryAddress'],"North Stadium")
+		self.assertEqual(json.loads(response.content.decode())['deliveryDate'],"2020-04-03 00:00:00")
+		self.assertEqual(json.loads(response.content.decode())['suggestedPrice'],"0.5")
+		self.assertEqual(json.loads(response.content.decode())['totalAmountDue'],"10.6")
 
 	# 	act = {}
 	def tearDown(self):
@@ -149,8 +150,9 @@ class FuelQuoteModelTest(TestCase):
 
 class tetGetOrderHistory(TestCase):
 	def setUp(self):
-		UserInfo.objects.create(username='11223344', password='123')
-		Profile.objects.create(id=1, username='11223344', fullname='tom', address1='test address1',address2='test address2',city='test city',state='test state',zipcode='test zipcode')
+		UserInfo.objects.create(username='11223344', password='123',flag=1)
+		Profile.objects.create(username='11223344', fullname='tom', address1='test address1',address2='test address2',city='test city',state='TX',zipcode='00111')
+		Order.objects.create(username='11223344',gallonsRequested=5,deliveryAddress='deliveryAddress',deliveryDate='2020-04-03 00:00:00',suggestedPrice=0.5,totalAmountDue=1.5)
 	
 	def testGetOrderHistoryUrl(self):
 		c=Client()
@@ -159,10 +161,10 @@ class tetGetOrderHistory(TestCase):
 	
 	def testGetOrderHistory(self):
 		c=Client()
-		UserInfo.objects.create(username= '11223344', password="123")
+		# UserInfo.objects.create(username= '11223344', password='123')
 		response=c.post('/api/login/',{"username":"11223344","password":"123"})
 		self.assertEqual(json.loads(response.content.decode())['flag'],1)
-		response=c.post('/api/getOrderHistory/',{"userid":"\"11223344\""})
+		response=c.post('/api/getOrderHistory/',{"username":"11223344"})
 		self.assertEqual(json.loads(response.content.decode())['code'],4001)
 
 	def tearDown(self):

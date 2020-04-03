@@ -1,111 +1,9 @@
-# from django.shortcuts import render
-# from rest_framework.views import APIView
-# from django.http import JsonResponse
-# # from rest_framework.decorators import api_view
-# class RegisterView(APIView):
-# 	# @api_view(['POST'])
-# 	def post(self, request,*args,**kwargs):
-# 		ret= {'code':1000, 'msg':None}
-		
-# 		try:
-# 			username= request.POST.get('username',None)
-# 			password = request.POST.get('password',None)
-# 			# username= request._request.POST.get('username',None)
-# 			# password = request._request.POST.get('password',None)
-# 			obj = models.UserInfo.objects.create(username=username,password=password)
-# 			if not obj:
-# 				newUser=models.UserInfo.objects.create(username=username,password= password)
-# 				newUser.save()
-# 				ret['code']=100
-# 				ret['msg']= u'create account success'
-# 				print(request.body)
-# 				print(request.POST)
-# 			else:
-# 				ret['code']=101
-# 				ret['msg']= u'user existed'
-# 		except Exception as e:
-# 			ret['code'] =102
-# 			ret['msg']= u'register front-end submit/db rw error '
-# 		return JsonResponse(ret)
-
-
-
-# class LoginView(APIView):
-# 	# @api_view(['GET'])
-# 	def get(self,request,*args,**kwargs):
-		
-# 		ret ={'code': 1000, 'msg': None}
-# 		try:
-
-# 			# print(request.body)
-# 				# username = request.data.get('username',None)
-# 			# password = request.data.get('password')
-# 			# print(username)
-# 			# # obj = auth.authenticate(request,username=user, password = password)
-# 			# obj = models.UserInfo.objects.create(username=username,password=password)
-# 			# if not obj:
-# 			# 	ret['code']=1001
-# 			# 	ret['msg'] ='user name or password error'
-# 			# else:
-# 				queryset = UserInfo.objects.all()
-# 				print(queryset)
-# 				ret['code'] =1000
-# 				ret['msg']='user login success'
-
-# 		except Exception as e:
-# 			ret['code']=1002
-# 			ret['msg']= 'login  front-end submit/db rw error '
-
-# 		print(request.body)
-# 		print(request.POST)
-
-# 		return JsonResponse(ret)
-
-
-
 from django.shortcuts import render
 from django.http import JsonResponse
-# from django.http import HttpResponse
 from django.views.decorators.http import require_http_methods
-# from django.core import serializers
 from .models import UserInfo,Profile,Order
-
-# from django.views.decorators.csrf import csrf_exempt
 from rest_framework.decorators import api_view
 import json
-
-
-
-# @require_http_methods(['POST'])
-# @csrf_exempt
-# @require_http_methods(['GET'])
-# @require_http_methods(['POST'])
-@api_view(['POST'])
-def show_info(request):
-  response = {'code': 1000, 'username':None, 'password': None,'msg': None}
-  try:
-    
-    # request_data=json.loads(request.body)
-    print(request.user)
-    print(request.body)
-
-
-
-    username = request.POST.get("username",1)
-   
-    password = request.POST.get("password",1)
-    # obj=models.UserInfo.objects.get('data')
-
-    response['username']= username
-    response['password']=password
-
-    response['msg'] = 'success'
-    response['error_num'] = 0
-  except Exception as e:
-    response['msg'] = str(e)
-    response['error_num'] = 1
-  return JsonResponse(response)
-
 
 
 @api_view(['POST'])
@@ -137,7 +35,6 @@ def register(request):
 	try:
 		username= request.POST.get('username')
 		password = request. POST.get('password')
-		# print(username)
 		obj = UserInfo.objects.filter(username=username).count()
 
 		if obj==0:
@@ -192,47 +89,14 @@ def getUserProfile(request):
 		ret['msg'] = 'can not connect to front end'
 	return JsonResponse(ret)
 
-# @api_view(['POST'])
-# def profile(request):
-# 	ret ={'code': 2000, 'username':None, 'flag':None,'msg': None, 'userid': None, 'address1': None, 'address2': None, 'city': None, 'state':None, 'zipcode': None}
-# 	try:
-# 		username= request.POST.get('username')
-# 		print(username)
-# 		# fullname= request.POST.get('fullname')
-# 		# password = request. POST.get('password')
-# 		address1 = request. POST.get('address1')
-# 		address2 = request. POST.get('address2')
-# 		city = request. POST.get('city')
-# 		state = request. POST.get('state')
-# 		zipcode = request. POST.get('zipcode')
-# 		print('Hi, before executed Profile class')
-# 		obj = Profile.objects.filter(username=username).count()
-# 		print('Hi')
-# 		if obj==0:
-# 			newUser=Profile.objects.create(username=username,address1=address1,address2=address2,city=city,state=state,zipcode=zipcode)
-# 			newUser.save()
-# 			ret['username']=username
-# 			# ret['fullname']=fullname
-# 			ret['address1']=address1
-# 			ret['address2']=address2
-# 			ret['city']=city
-# 			ret['state']=state
-# 			ret['zipcode']=zipcode
-# 			ret['msg']= username+ ' profiles was successfully conducted'
-# 		else:
-# 			ret['code']=2002
-# 			ret['msg']= 'username existed'
-# 	except Exception as e:
-# 		ret['code'] = 2005
-# 		ret['msg'] = 'can not connect to front end'	
-# 	return JsonResponse(ret)
 
 @api_view(['POST'])
 def initprofile(request):
 	ret={'code':5000,'userid':None,'username':None,'address1':None,'address2':None,'city':None, 'state':None,'zipcode':None, 'msg':None}
 	try:
 		userid =eval(request.POST.get('userid'))
-		flag = UserInfo.objects.get(username=userid).flag
+		# flag = UserInfo.objects.get(username=userid).flag
+		flag= Profile.objects.filter(username=userid).count()
 		if flag==1:
 			ret['code']=5001
 			ret['userid']=userid
@@ -243,6 +107,9 @@ def initprofile(request):
 			ret['state']=Profile.objects.get(username=userid).state
 			ret['zipcode']=Profile.objects.get(username=userid).zipcode
 			ret['msg']=userid+" information"
+		else:
+			ret['code']=5003
+			ret['userid']=userid
 	except Exception as e:
 		ret['code']=5002
 		ret['msg']= "can not connect to front end or db error"
@@ -254,34 +121,21 @@ def profile(request):
 	ret={'code':3000,'userid':None,'username':None,'address1':None,'address2':None,'city':None, 'state':None,'zipcode':None, 'msg':None}
 	try:
 		userid =eval(request.POST.get('userid'))
-		print(userid)
-		# flag = UserInfo.objects.get(username=userid).flag
-		# print(flag)
-		# if flag==1:
-		# 	ret['code']=3004
-		# 	ret['userid']=userid
-		# 	ret['username']=Profile.objects.get(username=userid).fullname
-		# 	ret['address1']=Profile.objects.get(username=userid).address1
-		# 	ret['address2']=Profile.objects.get(username=userid).address2
-		# 	ret['city']=Profile.objects.get(username=userid).city
-		# 	ret['state']=Profile.objects.get(username=userid).state
-		# 	ret['zipcode']=Profile.objects.get(username=userid).zipcode
-		# 	ret['msg']=userid+" information"
-		# 	# return JsonResponse(ret)
+		# print(userid)
 		username =  request.POST.get('username')
-		print(username)
+		# print(username)
 		address1 = request.POST.get('address1')
-		print(address1)
+		# print(address1)
 		address2 = request.POST.get('address2')
-		print(address2)
+		# print(address2)
 		city = request.POST.get('city')
-		print(city)
+		# print(city)
 		state = request.POST.get('state')
-		print(state)
+		# print(state)
 		zipcode=request.POST.get('zipcode')
-		print(zipcode)
+		# print(zipcode)
 		obj=Profile.objects.filter(username=userid).count()
-		print(obj)
+		# print(obj)
 
 
 
@@ -293,17 +147,23 @@ def profile(request):
 			ret['msg']=username+  "profile completed"
 			ret['userid']=userid
 			ret['username']=username
+			ret['address1']=address1
+			ret['address2']=address2
+			ret['city']=city
+			ret['state']=state
+			ret['zipcode']=zipcode
 		else:
 			ret['code']=3002
 			ret['msg']= userid+" information update success"
 			ret['userid']= userid
 			Profile.objects.filter(username=userid).update(fullname=username,address1=address1,address2=address2,city=city,state=state,zipcode=zipcode)
-			ret['username']=Profile.objects.get(username=userid).fullname
-			ret['address1']=Profile.objects.get(username=userid).address1
-			ret['address2']=Profile.objects.get(username=userid).address2
-			ret['city']=Profile.objects.get(username=userid).city
-			ret['state']=Profile.objects.get(username=userid).state
-			ret['zipcode']=Profile.objects.get(username=userid).zipcode
+			profile=Profile.objects.filter(username=userid)[0]
+			ret['username']=profile.fullname
+			ret['address1']=profile.address1
+			ret['address2']=profile.address2
+			ret['city']=profile.city
+			ret['state']=profile.state
+			ret['zipcode']=profile.zipcode
 	except Exception as e:
 		ret['code']=3003
 		ret['msg']= "can not connect to front end or db error"
@@ -350,6 +210,12 @@ def submitOrder(request):
 		newOrder=Order.objects.create(username=username,gallonsRequested=gallonsRequested,deliveryAddress=deliveryAddress,deliveryDate=deliveryDate,suggestedPrice=suggestedPrice,totalAmountDue=totalAmountDue)
 		newOrder.save()
 		ret['code']= 2001
+		ret['username']=username
+		ret['gallonsRequested']=gallonsRequested
+		ret['deliveryDate']=deliveryDate
+		ret['deliveryAddress']=deliveryAddress
+		ret['suggestedPrice']=suggestedPrice
+		ret['totalAmountDue']=totalAmountDue
 	except Exception as e:
 		ret['code']= 2002
 		ret['msg']='can not connect to front end'

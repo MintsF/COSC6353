@@ -375,12 +375,12 @@
       that.userlist.userid=localStorage.getItem('username');
       var postData = this.$qs.stringify({
       userid: that.userlist.userid,
-      username: that.userlist.username,
-      address1: that.userlist.address1,
-      address2: that.userlist.address2,
-      city: that.userlist.city,
-      state: that.userlist.state,
-      zipcode: that.userlist.zipcode,
+      // username: that.userlist.username,
+      // address1: that.userlist.address1,
+      // address2: that.userlist.address2,
+      // city: that.userlist.city,
+      // state: that.userlist.state,
+      // zipcode: that.userlist.zipcode,
       });
       this.$axios.post('/api/initProfile/',postData).then(res=>{
         console.log(res.data);

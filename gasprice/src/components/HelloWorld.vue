@@ -92,7 +92,8 @@
       return{
         title: 'Change password',
         show: false,
-        userlist: { //用户信息表单
+        
+        userlist: { 
           userid: '',
           username: '',
           address1: '',
