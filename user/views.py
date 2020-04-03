@@ -357,38 +357,38 @@ def submitOrder(request):
 
 @api_view(['POST'])
 def getOrderHistory(request):
-	ret ={'code': 2000, 'total':None,'orderList':[],}
+	ret ={'code': 4000, 'total':None,'orderList':[],}
 	# try:
-	username= request.POST.get('username')
-	print(username)
-	obj = Order.objects.filter(username = username)
-	# print(obj.values())
-	# print(obj.count())
-	ret['total'] = obj.count()
-	if(obj.count() == 0):
-		ret['orderList'] = {
-			'gallonsRequested': 0,
-			'deliveryAddress':"00",
-			'deliveryDate': "00",
-			'suggestedPrice': 0,
-			'totalAmountDue': 0
-		}
-	else:
-		i=0
-		for order in obj:
-			# print(order)
-			# i=i+1
-			# print(i)
-			ret['orderList'].append({
-				'gallonsRequested': order.gallonsRequested,
-				'deliveryAddress': order.deliveryAddress,
-				'deliveryDate': order.deliveryDate,
-				'suggestedPrice': order.suggestedPrice,
-				'totalAmountDue': order.totalAmountDue
-			})
+		username= request.POST.get('username')
+		print(username)
+		obj = Order.objects.filter(username = username)
+		# print(obj.values())
+		# print(obj.count())
+		ret['total'] = obj.count()
+		if(obj.count() == 0):
+			ret['orderList'] = {
+				'gallonsRequested': 0,
+				'deliveryAddress':"00",
+				'deliveryDate': "00",
+				'suggestedPrice': 0,
+				'totalAmountDue': 0
+			}
+		else:
+			i=0
+			for order in obj:
+				# print(order)
+				# i=i+1
+				# print(i)
+				ret['orderList'].append({
+					'gallonsRequested': order.gallonsRequested,
+					'deliveryAddress': order.deliveryAddress,
+					'deliveryDate': order.deliveryDate,
+					'suggestedPrice': order.suggestedPrice,
+					'totalAmountDue': order.totalAmountDue
+				})
+  			ret['code']= 4001
 
-
-	# except Exception as e:
-	# 	ret['code']= 2005
-	# 	ret['msg']='can not connect to front end'
+	except Exception as e:
+		ret['code']= 2005
+		ret['msg']='can not connect to front end'
 	return JsonResponse(ret)

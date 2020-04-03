@@ -108,9 +108,6 @@ class ProfileModelTest(TestCase):
 		self.assertEqual(json.loads(response.content.decode())['code'],4001)
 
 
-
-
-# class FuelQuoteModelTest(TestCase):
 class FuelQuoteModelTest(TestCase):
 	def setUp(self):
 		UserInfo.objects.create(username='11223344', password='123')
@@ -129,6 +126,11 @@ class FuelQuoteModelTest(TestCase):
 		response=c.post('/api/getUserProfile/',{"userid":"\"11223344\""})
 		self.assertEqual(json.loads(response.content.decode())['code'],3001)
 
+    def testGetUserProfileUrl(self):
+		c=Client()
+		response= c.post('/api/submitOrder/',{"username":"11223344"})
+		self.assertEqual(response.status_code,200)
+
 	def testSubmitOrder(self):
 		c= Client()
 		response=c.post('/api/submitOrder/',{"username":"11223355","fullname":"Mike","address1":"North Stadium", "address2":"3333","city":"Houston", "state":"TX","zipcode":"77700"})
@@ -145,9 +147,26 @@ class FuelQuoteModelTest(TestCase):
 	def tearDown(self):
 		print("fuel quote model test finished")
 
+class tetGetOrderHistory(TestCase):
+	def setUp(self):
+		UserInfo.objects.create(username='11223344', password='123')
+		Profile.objects.create(id=1, username='11223344', fullname='tom', address1='test address1',address2='test address2',city='test city',state='test state',zipcode='test zipcode')
+	
+	def testGetOrderHistoryUrl(self):
+		c=Client()
+		response= c.post('/api/getOrderHistory/',{"username":"11223344"})
+		self.assertEqual(response.status_code,200)    
+	
+	def testGetOrderHistory(self):
+		c=Client()
+		UserInfo.objects.create(username= '11223344', password="123")
+		response=c.post('/api/login/',{"username":"11223344","password":"123"})
+		self.assertEqual(json.loads(response.content.decode())['flag'],1)
+		response=c.post('/api/getOrderHistory/',{"userid":"\"11223344\""})
+		self.assertEqual(json.loads(response.content.decode())['code'],4001)
 
-                  
-
+	def tearDown(self):
+		print("fuel order history model test finished")	
 
 
 
