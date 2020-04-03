@@ -61,11 +61,11 @@ def getUserProfile(request):
 	ret = {'code': 3000, 'profile': None}
 	try:
 		username = eval(request.POST.get('username'))
-		print("username", username)
+		# print("username", username)
 		# check whether exist this user
 		obj = Profile.objects.filter( username = username)
 		# print(obj.values())
-		print(obj.count())
+		# print(obj.count())
 		if obj.count() == 0:
 			# test, database have no data
 			ret['profile']={
@@ -136,9 +136,7 @@ def profile(request):
 		# print(zipcode)
 		obj=Profile.objects.filter(username=userid).count()
 		# print(obj)
-
-
-
+		
 		if obj==0:
 			newProfile= Profile.objects.create(username=userid,fullname=username,address1=address1,address2=address2,city=city,state=state,zipcode=zipcode)
 			newProfile.save()
@@ -177,7 +175,7 @@ def changepassword(request):
 		oldPassword = request.POST.get('password')
 		newPassword = request.POST.get('newPassword')
 		obj =  UserInfo.objects.filter(username=username,password=oldPassword).count()
-		print(obj)
+		# print(obj)
 		if obj==0:
 			ret['code']=4001
 			ret['username']=username
@@ -202,11 +200,11 @@ def submitOrder(request):
 		gallonsRequested = request.POST.get('gallonsRequested')
 		deliveryAddress = request.POST.get('deliveryAddress')
 		deliveryDate = request.POST.get('deliveryDate')
-		print(deliveryDate)
+		# print(deliveryDate)
 		suggestedPrice = request.POST.get('suggestedPrice')
 		totalAmountDue = request.POST.get('totalAmountDue')
 
-		print(username)
+		# print(username)
 		newOrder=Order.objects.create(username=username,gallonsRequested=gallonsRequested,deliveryAddress=deliveryAddress,deliveryDate=deliveryDate,suggestedPrice=suggestedPrice,totalAmountDue=totalAmountDue)
 		newOrder.save()
 		ret['code']= 2001
@@ -226,7 +224,7 @@ def getOrderHistory(request):
 	ret ={'code': 4000, 'total':None,'orderList':[],}
 	try:
 		username= request.POST.get('username')
-		print(username)
+		# print(username)
 		obj = Order.objects.filter(username = username)
 		# print(obj.values())
 		# print(obj.count())

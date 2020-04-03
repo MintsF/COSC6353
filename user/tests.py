@@ -22,6 +22,7 @@ class UserInfoModelTest(TestCase):
 		response=c.post('/api/login/',{"username":"11223344","password":"123"})
 		self.assertEqual(response.status_code,200)
 
+
 	def testUserLogin(self):
 		c=Client()
 		response=c.post('/api/login/',{"username":"11223344","password":"123"})
@@ -37,6 +38,9 @@ class UserInfoModelTest(TestCase):
 		c=Client()
 		response=c.post('/api/login/',{"username":"","password":"122"})
 		self.assertEqual(json.loads(response.content.decode())['code'],1001)
+
+	def tearDown(self):
+		print("user login model test finished")	
 
 class RegisterModelTest(TestCase):
 	def setUp(self):
@@ -60,10 +64,18 @@ class RegisterModelTest(TestCase):
 		response=c.post('/api/register/',{"username":"11223344","password": "124"})
 		self.assertEqual(json.loads(response.content.decode())['code'],2002)
 
+	def tearDown(self):
+		print("register model test finished")	
+
 class ProfileModelTest(TestCase):
 	def setUp(self):
 		Profile.objects.create(username='11223344',fullname='Mike',address1='North Stadium', address2='',city='Houston', state='TX',zipcode='77700')
 		UserInfo.objects.create(username= '11223344', password="123")
+
+	def testProfileUrl(self):
+		c=Client()
+		response= c.post('/api/profile/',{"userid":"11223355","username":"Mike","address1":"North Stadium", "address2":"3333","city":"Houston", "state":"TX","zipcode":"77700"})
+		self.assertEqual(response.status_code,200)
 
 	def testProfileInsert(self):
 		c= Client()
@@ -88,6 +100,7 @@ class ProfileModelTest(TestCase):
 		self.assertEqual(json.loads(response.content.decode())['username'],"Joe")
 		self.assertEqual(json.loads(response.content.decode())['userid'],"11223344")
 
+
 	def testInitProfie(self):
 		c=Client()
 		UserInfo.objects.create(username= '11223366', password="123")
@@ -95,6 +108,11 @@ class ProfileModelTest(TestCase):
 		self.assertEqual(json.loads(response.content.decode())['flag'],0)
 		response=c.post('/api/initProfile/',{"userid":"\"11223366\""})
 		self.assertEqual(json.loads(response.content.decode())['code'],5003)
+
+	def testChangePasswordUrl(self):
+		c=Client()
+		response= c.post('/api/changepassword/',{"username":"\"11223344\"","password":"123","newPassword":"134"})
+		self.assertEqual(response.status_code,200)
 
 	def testChangPassword(self):
 		c=Client()
@@ -106,6 +124,9 @@ class ProfileModelTest(TestCase):
 		c=Client()
 		response= c.post('/api/changepassword/',{"username":"\"11223344\"","password":"124","newPassword":"134"})
 		self.assertEqual(json.loads(response.content.decode())['code'],4001)
+
+	def tearDown(self):
+		print("profile model test finished")	
 
 
 class FuelQuoteModelTest(TestCase):
