@@ -209,17 +209,18 @@
         });
         if(that.ruleForm.gallonsRequested !=''&& that.ruleForm.deliveryAddress !='' && that.ruleForm.deliveryDate !='' && that.ruleForm.suggestedPrice!='' && that.ruleForm.totalAmountDue!='' ){
           that.$axios.post('/api/submitOrder/',postData).then(function(res){
-              alert("sumbit success")
+              that.$message({
+                 message: 'sumbit success',
+                 type: 'success'
+              });
           },function(){
             console.log('error');
           });
-        }else{
-              if(that.ruleForm.gallonsRequested === ''){
-                alert("please enter the require info")
-              }else{
-                alert("gallons requested is 0")
-              }
-           
+        }else{          
+                 that.$message({
+                 message: 'please enter the require info',
+                type: 'warning'
+              }); 
         }
        
       },
