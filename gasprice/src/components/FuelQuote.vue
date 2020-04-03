@@ -26,11 +26,11 @@
          <h2>Fuel Quote </h2>
          <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="200px" class="demo-ruleForm" style="margin: 0px 330px">
            <el-form-item label="Gallons Requested" required prop="gallonsRequested">
-             <el-col :span="21"><el-input v-model="ruleForm.gallonsRequested" placeholder="please input  Gallons Requested"></el-input></el-col>
+             <el-col :span="21"><el-input v-model.number="ruleForm.gallonsRequested"  v-on:input="getPrice()"  placeholder="please input  Gallons Requested"></el-input></el-col>
              <el-col :span="1">Gal.</el-col>
            </el-form-item>
            <el-form-item label=" Deliver Date" required prop="deliveryDate">
-             <el-date-picker type="date"  @change="dateChange" value-format="yyyy-MM-dd"  placeholder="please select delivery Date" v-model="ruleForm.deliveryDate" style="width: 100%;"></el-date-picker>
+             <el-date-picker type="date"  @change="dateChange" v-on:input="getPrice()" value-format="yyyy-MM-dd"  placeholder="please select delivery Date" v-model="ruleForm.deliveryDate" style="width: 100%;"></el-date-picker>
            </el-form-item>
            <el-form-item label=" Delivery Address"  prop="deliveryAddress" >
              <el-input v-model="ruleForm.deliveryAddress" placeholder="please input delivery address" readonly="readonly"></el-input>
@@ -44,7 +44,7 @@
              <el-col :span="1">$</el-col>
            </el-form-item>
            <el-form-item>
-             <el-button type="success" @click="getPrice('ruleForm')">Get Price</el-button>
+             <!-- <el-button type="success" @click="getPrice('ruleForm')">Get Price</el-button> -->
              <el-button type="success" @click="submitForm('ruleForm')">Submit</el-button>
              <el-button @click="resetForm('ruleForm')">Reset</el-button>
            </el-form-item>
@@ -113,7 +113,7 @@
         rules: {
           gallonsRequested: [
             { required: true,  message: 'please enter  Gallons Requested', trigger: 'blur' },
-//            { type: 'number',  message: 'Gallons Requested must be a positive integer', trigger: 'blur' }
+           { type: 'number',  message: 'Gallons Requested must be a positive integer', trigger: 'blur' }
           ],
           deliveryDate: [
             { type: 'date', required: true, message: 'please select deliver Date', trigger: 'change' }
@@ -163,35 +163,38 @@
         console.log(this.ruleForm.deliveryDate );
       },
       getPrice(){
-        var locationFactor=0.04;
-        var currentPrice = 1.5;
-        var rateHistoryFactor=0;
-        var gallonsRequestedFactor = 0.03;
-        var companyProfitFactor = 0.1;
-        var rateFluctuation = 0.03;
-        if(this.profile.state=="Texas"||this.profile.state=="TX") {
-          locationFactor = 0.02;
+          var that = this;
+          // alert("getPrice");
+         if(that.ruleForm.gallonsRequested ===''){
+           return;
+         }
+         
+        if(that.ruleForm.deliveryAddress !='' && that.ruleForm.deliveryDate !='' ){
+            var locationFactor=0.04;
+            var currentPrice = 1.5;
+            var rateHistoryFactor=0;
+            var gallonsRequestedFactor = 0.03;
+            var companyProfitFactor = 0.1;
+            var rateFluctuation = 0.03;
+            if(this.profile.state=="Texas"||this.profile.state=="TX") {
+              locationFactor = 0.02;
+            }
+            if(this.profile.isRequestedFuel != 0){
+              rateHistoryFactor = 0.01;
+            }
+            if(this.ruleForm.gallonsRequested >=1000){
+              gallonsRequestedFactor = 0.02
+            }
+    //        if(ruleForm.deliveryDate)
+            var margin = currentPrice * (locationFactor - rateHistoryFactor + gallonsRequestedFactor + companyProfitFactor + rateFluctuation)
+            var suggestedPrice = currentPrice + margin;
+            this.ruleForm.suggestedPrice = suggestedPrice;
+            this.ruleForm.totalAmountDue = suggestedPrice* this.ruleForm.gallonsRequested;
+        }else{
+            // alert("please enter required info");
         }
-        if(this.profile.isRequestedFuel != 0){
-          rateHistoryFactor = 0.01;
-        }
-        if(this.ruleForm.gallonsRequested >=1000){
-          gallonsRequestedFactor = 0.02
-        }
-//        if(ruleForm.deliveryDate)
-        var margin = currentPrice * (locationFactor - rateHistoryFactor + gallonsRequestedFactor + companyProfitFactor + rateFluctuation)
-        var suggestedPrice = currentPrice + margin;
-        this.ruleForm.suggestedPrice = suggestedPrice;
-        this.ruleForm.totalAmountDue = suggestedPrice* this.ruleForm.gallonsRequested;
       },
       submitForm(formName) {
-////             ruleForm: {
-//        gallonsRequested:'',
-//          deliveryAddress: '',
-//          deliverDate: '',
-//          suggestedPrice:'',
-//          totalAmountDue:''
-//      },
         console.log("submit order")
         var that = this;
         console.log("ddsd"+that.userName);
@@ -204,14 +207,21 @@
           suggestedPrice :  that.ruleForm.suggestedPrice,
           totalAmountDue : that.ruleForm.totalAmountDue
         });
-        this.$axios.post('/api/submitOrder/',postData).then(function(res){
-          // that.profile = res.profile;
-          // that.ruleForm.deliveryAddress = that.profile.address +", "+ that.profile.city +", "+ that.profile.state +" "+ that.profile.zipCode;
-
-
-        },function(){
-          console.log('error');
-        });
+        if(that.ruleForm.gallonsRequested !=''&& that.ruleForm.deliveryAddress !='' && that.ruleForm.deliveryDate !='' && that.ruleForm.suggestedPrice!='' && that.ruleForm.totalAmountDue!='' ){
+          that.$axios.post('/api/submitOrder/',postData).then(function(res){
+              alert("sumbit success")
+          },function(){
+            console.log('error');
+          });
+        }else{
+              if(that.ruleForm.gallonsRequested === ''){
+                alert("please enter the require info")
+              }else{
+                alert("gallons requested is 0")
+              }
+           
+        }
+       
       },
       resetForm(formName) {
         this.$refs[formName].resetFields();

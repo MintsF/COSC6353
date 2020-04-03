@@ -358,7 +358,7 @@ def submitOrder(request):
 @api_view(['POST'])
 def getOrderHistory(request):
 	ret ={'code': 4000, 'total':None,'orderList':[],}
-	# try:
+	try:
 		username= request.POST.get('username')
 		print(username)
 		obj = Order.objects.filter(username = username)
@@ -386,7 +386,7 @@ def getOrderHistory(request):
 					'suggestedPrice': order.suggestedPrice,
 					'totalAmountDue': order.totalAmountDue
 				})
-  			ret['code']= 4001
+			ret['code']= 4001
 
 	except Exception as e:
 		ret['code']= 2005
