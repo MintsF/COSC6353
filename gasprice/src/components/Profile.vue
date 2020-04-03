@@ -384,7 +384,7 @@
       });
       this.$axios.post('/api/initProfile/',postData).then(res=>{
         console.log(res.data);
-        that.userlist.userid=res.data.userid;
+        that.userlist.userid=eval(res.data.userid);
         that.userlist.username=res.data.username;
         that.userlist.address1=res.data.address1;
         that.userlist.address2=res.data.address2;
@@ -499,6 +499,11 @@
           });
           this.$axios.post('/api/profile/',postData).then(res=>{
             console.log(res.data)
+            if(res.data.code==3001){
+              alert(res.data.msg)
+            }else if (res.data.code==3002){
+              alert(res.data.msg)
+            }
           }).catch((err)=>{
             console.log("can not connec to server")
           })
