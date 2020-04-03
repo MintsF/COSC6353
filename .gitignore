@@ -18,7 +18,7 @@ user/__pycache__/
 
 user/migrations/__pycache__/
 
-# fuelbackend/settings.py
+fuelbackend/settings.py
 
 user/migrations/0003_auto_20200323_1508.py
 
