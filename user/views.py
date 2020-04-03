@@ -162,33 +162,34 @@ def register(request):
 @api_view(['POST'])
 def getUserProfile(request):
 	ret = {'code': 3000, 'profile': None}
-	# try:
-	username = eval(request.POST.get('username'))
-	print("username", username)
-	# check whether exist this user
-	obj = Profile.objects.filter( username = username)
-	# print(obj.values())
-	print(obj.count())
-	if obj.count() == 0:
-		# test, database have no data
-		ret['profile']={
-			'address1' : 'no address',
-			'address2':'',
-			'city':'Houston',
-			'state':'TX',
-			'zipCode':'77077'
-		}
-	else:
-		ret['profile'] = {
-			'address1': obj[0].address1,
-			'address2': obj[0].address2,
-			'city': obj[0].city,
-			'state': obj[0].state,
-			'zipCode': obj[0].zipcode
-		}
-	# except Exception as e:
-	# 	ret['code'] = 2005
-	# 	ret['msg'] = 'can not connect to front end'
+	try:
+		username = eval(request.POST.get('username'))
+		print("username", username)
+		# check whether exist this user
+		obj = Profile.objects.filter( username = username)
+		# print(obj.values())
+		print(obj.count())
+		if obj.count() == 0:
+			# test, database have no data
+			ret['profile']={
+				'address1' : 'no address',
+				'address2':'',
+				'city':'Houston',
+				'state':'TX',
+				'zipCode':'77077'
+			}
+		else:
+			ret['profile'] = {
+				'address1': obj[0].address1,
+				'address2': obj[0].address2,
+				'city': obj[0].city,
+				'state': obj[0].state,
+				'zipCode': obj[0].zipcode
+			}
+			ret['code'] = 3001
+	except Exception as e:
+		ret['code'] = 2005
+		ret['msg'] = 'can not connect to front end'
 	return JsonResponse(ret)
 
 # @api_view(['POST'])
@@ -336,23 +337,22 @@ def changepassword(request):
 @api_view(['POST'])
 def submitOrder(request):
 	ret ={'code': 2000, 'username':None,  'gallonsRequested':None, 'deliveryAddress': None,'deliverDate': None,'suggestedPrice':None, 'totalAmountDue':None}
-	# try:
-	username= request.POST.get('username')
-	gallonsRequested = request.POST.get('gallonsRequested')
-	deliveryAddress = request.POST.get('deliveryAddress')
-	deliveryDate = request.POST.get('deliveryDate')
-	print(deliveryDate)
-	suggestedPrice = request.POST.get('suggestedPrice')
-	totalAmountDue = request.POST.get('totalAmountDue')
+	try:
+		username= request.POST.get('username')
+		gallonsRequested = request.POST.get('gallonsRequested')
+		deliveryAddress = request.POST.get('deliveryAddress')
+		deliveryDate = request.POST.get('deliveryDate')
+		print(deliveryDate)
+		suggestedPrice = request.POST.get('suggestedPrice')
+		totalAmountDue = request.POST.get('totalAmountDue')
 
-	print(username)
-	newOrder=Order.objects.create(username=username,gallonsRequested=gallonsRequested,deliveryAddress=deliveryAddress,deliveryDate=deliveryDate,suggestedPrice=suggestedPrice,totalAmountDue=totalAmountDue)
-	newOrder.save()
-
-
-	# except Exception as e:
-	# 	ret['code']= 2005
-	# 	ret['msg']='can not connect to front end'
+		print(username)
+		newOrder=Order.objects.create(username=username,gallonsRequested=gallonsRequested,deliveryAddress=deliveryAddress,deliveryDate=deliveryDate,suggestedPrice=suggestedPrice,totalAmountDue=totalAmountDue)
+		newOrder.save()
+		ret['code']= 2001
+	except Exception as e:
+		ret['code']= 2002
+		ret['msg']='can not connect to front end'
 	return JsonResponse(ret)
 
 @api_view(['POST'])

@@ -2,6 +2,7 @@ from django.test import TestCase
 
 # Create your tests here.
 from user.models import UserInfo
+from user.models import Order
 from django.test import Client
 from user import views
 import json
@@ -112,8 +113,8 @@ class ProfileModelTest(TestCase):
 # class FuelQuoteModelTest(TestCase):
 class FuelQuoteModelTest(TestCase):
 	def setUp(self):
-		# UserInfo.objects.create(username='11223344',password='123')
-	    Activity.objects.create(id=1, username='11223344', fullname='tom', address1='test address1',address2='test address2',city='test city',state='test state',zipcode='test zipcode')
+		UserInfo.objects.create(username='11223344', password='123')
+		Profile.objects.create(id=1, username='11223344', fullname='tom', address1='test address1',address2='test address2',city='test city',state='test state',zipcode='test zipcode')
 	
 	def testGetUserProfileUrl(self):
 		c=Client()
@@ -121,13 +122,28 @@ class FuelQuoteModelTest(TestCase):
 		self.assertEqual(response.status_code,200)
 	
 	def testGetUserProfile(self):
-		A = profile()
-		post = A.post()
-		self.assertEqual(len(post),1)
+		c=Client()
+		UserInfo.objects.create(username= '11223344', password="123")
+		response=c.post('/api/login/',{"username":"11223344","password":"123"})
+		self.assertEqual(json.loads(response.content.decode())['flag'],1)
+		response=c.post('/api/getUserProfile/',{"userid":"\"11223344\""})
+		self.assertEqual(json.loads(response.content.decode())['code'],3001)
 
-	# def testSubmitOrder(self):
+	def testSubmitOrder(self):
+		c= Client()
+		response=c.post('/api/submitOrder/',{"username":"11223355","fullname":"Mike","address1":"North Stadium", "address2":"3333","city":"Houston", "state":"TX","zipcode":"77700"})
+		# newOrder=Order.objects.create(username=username,gallonsRequested=gallonsRequested,deliveryAddress=deliveryAddress,deliveryDate=deliveryDate,suggestedPrice=suggestedPrice,totalAmountDue=totalAmountDue)
+		self.assertEqual(json.loads(response.content.decode())['code'],2001)
+		self.assertEqual(json.loads(response.content.decode())['username'],"Mike")
+		self.assertEqual(json.loads(response.content.decode())['address1'],"North Stadium")
+		self.assertEqual(json.loads(response.content.decode())['address2'],"3333")
+		self.assertEqual(json.loads(response.content.decode())['city'],"Houston")
+		self.assertEqual(json.loads(response.content.decode())['state'],"TX")
+		self.assertEqual(json.loads(response.content.decode())['zipcode'],"77700")
+
 	# 	act = {}
-    # def tearDown(self):
+	def tearDown(self):
+		print("fuel quote model test finished")
 
 
                   
