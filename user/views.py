@@ -163,11 +163,12 @@ def register(request):
 def getUserProfile(request):
 	ret = {'code': 3000, 'profile': None}
 	# try:
-	username = request.POST.get('username')
-	print(username)
+	username = eval(request.POST.get('username'))
+	print("username", username)
 	# check whether exist this user
-	obj = Profile.objects.filter( fullname = username)
-	print(obj)
+	obj = Profile.objects.filter( username = username)
+	# print(obj.values())
+	print(obj.count())
 	if obj.count() == 0:
 		# test, database have no data
 		ret['profile']={
@@ -179,11 +180,11 @@ def getUserProfile(request):
 		}
 	else:
 		ret['profile'] = {
-			'address1': obj.address,
-			'address2': '',
-			'city': obj.city,
-			'state': obj.status,
-			'zipCode': obj.zipCode
+			'address1': obj[0].address1,
+			'address2': obj[0].address2,
+			'city': obj[0].city,
+			'state': obj[0].state,
+			'zipCode': obj[0].zipcode
 		}
 	# except Exception as e:
 	# 	ret['code'] = 2005
@@ -375,9 +376,9 @@ def getOrderHistory(request):
 	else:
 		i=0
 		for order in obj:
-			print(order)
-			i=i+1
-			print(i)
+			# print(order)
+			# i=i+1
+			# print(i)
 			ret['orderList'].append({
 				'gallonsRequested': order.gallonsRequested,
 				'deliveryAddress': order.deliveryAddress,

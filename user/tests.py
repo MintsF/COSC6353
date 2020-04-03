@@ -60,7 +60,32 @@ class RegisterModelTest(TestCase):
 		self.assertEqual(json.loads(response.content.decode())['code'],2002)
 
 class FuelQuoteModelTest(TestCase):
+	def setUp(self):
+		# UserInfo.objects.create(username='11223344',password='123')
+	    Activity.objects.create(id=1, username='11223344', fullname='tom', address1='test address1',address2='test address2',city='test city',state='test state',zipcode='test zipcode')
 	
+	def testGetUserProfileUrl(self):
+		c=Client()
+		response= c.post('/api/getUserProfile/',{"username":"11223344"})
+		self.assertEqual(response.status_code,200)
+	
+	def testGetUserProfile(self):
+		A = profile()
+		post = A.post()
+		self.assertEqual(len(post),1)
+
+	# def testSubmitOrder(self):
+	# 	act = {}
+    # def tearDown(self):
+
+
+                  
+
+
+
+
+
+
 		
 
 
