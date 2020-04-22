@@ -31,7 +31,7 @@
       </div>
 
       <div>
-        <div class="tag2"> <router-link to=""><a  style="color: gray">forget password</a></router-link> </div>
+        <!-- <div class="tag2"> <router-link to=""><a  style="color: gray">forget password</a></router-link> </div> -->
         <div class="tag2"><router-link to="/SignUp"><a  style="color: gray">Sign Up</a></router-link></div>
       </div>
 

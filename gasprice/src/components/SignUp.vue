@@ -99,6 +99,13 @@
           password: this.userInfo.pwd,
         });
         this.$axios.post('/api/register/',postData).then(res=>{
+          if(res.data.code == 2002){
+            alert('username already existed, please try again');
+            this.userInfo.name="";
+            this.userInfo.pwd="";
+            this.userInfo.cpwd="";
+            return false;
+          }
           this.$router.push({path:'/login'})
           console.log(res)
         }, function(){

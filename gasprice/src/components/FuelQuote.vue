@@ -7,6 +7,7 @@
       <span class="nav-brand-txt">
         Fuel Quote System
       </span>
+      <div class="user-account" @click="logout()"><i class="el-icon-user-solid"><span style="margin-left: 5px">Logout</span></i></div>
       <div class="user-account" @click="goToProfile()"><i class="el-icon-user-solid"><span style="margin-left: 5px">Account</span></i></div>
       <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect" id="nav"
                text-color="#8f9397"
@@ -30,7 +31,7 @@
              <el-col :span="1">Gal.</el-col>
            </el-form-item>
            <el-form-item label=" Deliver Date" required prop="deliveryDate">
-             <el-date-picker type="date"  @change="dateChange" v-on:input="getPrice()" value-format="yyyy-MM-dd"  placeholder="please select delivery Date" v-model="ruleForm.deliveryDate" style="width: 100%;"></el-date-picker>
+             <el-date-picker type="date"  @change="dateChange" v-on:input="getPrice()" value-format="yyyy-MM-dd"  placeholder="please select delivery Date" v-model="ruleForm.deliveryDate" :picker-options="pickerOption" style="width: 100%;"></el-date-picker>
            </el-form-item>
            <el-form-item label=" Delivery Address"  prop="deliveryAddress" >
              <el-input v-model="ruleForm.deliveryAddress" placeholder="please input delivery address" readonly="readonly"></el-input>
@@ -61,7 +62,7 @@
             <el-table-column prop="suggestedPrice" label="Suggested Price" width="180"></el-table-column>
             <el-table-column prop="totalAmountDue" label="Total Amount Due" width="180"></el-table-column>
           </el-table>
-          <el-pagination
+<!--           <el-pagination
             background
             @current-change = "handleChangePage"
             layout="prev, pager, next"
@@ -69,7 +70,7 @@
             :total="total"
             :current-page.sync="currentPage"
             stripe style="float: right;padding: 20px 30px">
-          </el-pagination>
+          </el-pagination> -->
         </template>
       </div>
     </transition>
@@ -113,15 +114,33 @@
         rules: {
           gallonsRequested: [
             { required: true,  message: 'please enter  Gallons Requested', trigger: 'blur' },
-           { type: 'number',  message: 'Gallons Requested must be a positive integer', trigger: 'blur' }
+            { type: 'number',  message: 'Gallons Requested must be a positive integer', trigger: 'blur' },
+            { 
+              validator (rule, value, callback) {
+                if (/(^[1-9]\d*$)/.test(value)) {
+                  callback()
+                }else {
+                  callback(new Error('please input a positive integer'))
+                }
+                },trigger: 'blur'
+            }
           ],
           deliveryDate: [
-            { type: 'date', required: true, message: 'please select deliver Date', trigger: 'change' }
+            // { type: 'date', required: true, message: 'please select deliver Date', trigger: 'change' },
+            { required: true, message: 'please select deliver Date', trigger: 'change' },
+
           ],
 
-        }
+        },
+
+        pickerOption: {
+        disabledDate(time) {
+          return time.getTime() < Date.now() - 8.64e7;
+          },
+        },
       }
     },
+
     mounted() {
       const vm = this;
       this.contentId = 1;
@@ -137,9 +156,24 @@
         var postData =this.$qs.stringify ({
           username:  that.userName,
         });
+
+
+        this.$axios.post('/api/getOrderHistory/',postData).then(function(res){
+          var msg = res.data;
+          console.log(res);
+          if(msg.code==4001)
+            that.profile.isRequestedFuel=1;
+          console.log("get History");
+          console.log(that.profile.isRequestedFuel);
+
+        },function(){
+          console.log('error');
+        });
+
+
         this.$axios.post('/api/getUserProfile/',postData).then(function(res){
-         console.log(res.data);
-         that.profile = res.data.profile;
+          console.log(res.data);
+          that.profile = res.data.profile;
           that.ruleForm.deliveryAddress = that.profile.address1 +that.profile.address2+", "+ that.profile.city +", "+ that.profile.state +" "+ that.profile.zipCode;
         },function(){
           console.log('error');
@@ -162,6 +196,7 @@
         this.ruleForm.deliveryDate = val;
         console.log(this.ruleForm.deliveryDate );
       },
+
       getPrice(){
           var that = this;
           // alert("getPrice");
@@ -176,6 +211,8 @@
             var gallonsRequestedFactor = 0.03;
             var companyProfitFactor = 0.1;
             var rateFluctuation = 0.03;
+            var curDate = new Date(this.ruleForm.deliveryDate)
+            var curMonth = curDate.getMonth()+1;
             if(this.profile.state=="Texas"||this.profile.state=="TX") {
               locationFactor = 0.02;
             }
@@ -184,6 +221,10 @@
             }
             if(this.ruleForm.gallonsRequested >=1000){
               gallonsRequestedFactor = 0.02
+            }
+
+            if(curMonth>='4' &&curMonth<='6'){
+              rateFluctuation=0.04;
             }
     //        if(ruleForm.deliveryDate)
             var margin = currentPrice * (locationFactor - rateHistoryFactor + gallonsRequestedFactor + companyProfitFactor + rateFluctuation)
@@ -225,7 +266,14 @@
        
       },
       resetForm(formName) {
-        this.$refs[formName].resetFields();
+        // this.$refs[formName].resetFields();
+
+        this.ruleForm.gallonsRequested='';
+        // this.ruleForm.deliveryAddress: '',
+        this.ruleForm.deliveryDate='';
+        this.ruleForm.suggestedPrice='';
+        this.ruleForm.totalAmountDue='';
+        // console.log(this.profile.address);
       },
       getFuleQuoteHistory(){
         var that = this;
@@ -246,10 +294,17 @@
 
     },
 
-    handleChangePage(val){
-      this.currentPage=val;
-      this.getFuleQuoteHistory();
+    logout(){
+      localStorage.removeItem('username');
+      console.log(localStorage.getItem('username'));
+      this.$router.push('/');
+
     }
+
+    // handleChangePage(val){
+    //   this.currentPage=val;
+    //   this.getFuleQuoteHistory();
+    // }
     },
 
     computed:{
@@ -300,6 +355,7 @@
     padding-left: 20px;
     cursor:pointer;
   }
+
   .main-container{
     min-height: calc(100vh - 50px);
     width: 100%;

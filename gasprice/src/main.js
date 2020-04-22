@@ -13,10 +13,12 @@ import qs from 'qs'
 
 import ElementUI from '../node_modules/element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
+import elementLocale from 'element-ui/lib/locale/lang/en';
+Vue.use(ElementUI, { locale: elementLocale });
 
 
 Vue.config.productionTip = false
-Vue.use(ElementUI)
+// Vue.use(ElementUI)
 Vue.prototype.$axios=axios
 Vue.prototype.$cookie = VueCookies
 Vue.prototype.$qs = qs
