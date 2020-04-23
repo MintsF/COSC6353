@@ -346,6 +346,7 @@
     logout(){
       localStorage.removeItem('username');
       console.log(localStorage.getItem('username'));
+      sessionStorage.clear();
       this.$router.push('/');
 
     }

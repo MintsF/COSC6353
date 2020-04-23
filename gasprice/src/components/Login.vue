@@ -94,7 +94,7 @@ export default {
           // //////////////////////////////////////////
           let loginstatus = true;
           sessionStorage.setItem('loginstatus', loginstatus)
-          that.$store.commit('setRouting', loginstatus);
+          // that.$store.commit('setRouting', loginstatus);
 
           // 在vuex文件中
           // loginstatus: sessionStorage.getItem('loginstatus') || false
