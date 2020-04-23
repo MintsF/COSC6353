@@ -33,7 +33,7 @@
              <el-col :span="1">Gal.</el-col>
            </el-form-item>
            <el-form-item label=" Deliver Date" required prop="deliveryDate">
-             <el-date-picker type="date"  @change="dateChange" v-on:input="getPrice()" value-format="yyyy-MM-dd"  placeholder="please select delivery Date" v-model="ruleForm.deliveryDate" :picker-options="pickerOption" style="width: 100%;"></el-date-picker>
+             <el-date-picker type="date"  @change="dateChange" v-on:input="getPrice()" read-only value-format="yyyy-MM-dd"  placeholder="please select delivery Date" v-model="ruleForm.deliveryDate" :picker-options="pickerOption" style="width: 100%;"></el-date-picker>
            </el-form-item>
            <el-form-item label=" Delivery Address"  prop="deliveryAddress" >
              <el-input v-model="ruleForm.deliveryAddress" placeholder="please input delivery address" readonly="readonly"></el-input>
@@ -202,6 +202,11 @@
       gallons(){
         var that = this;
         // console.log("gallons")
+        if(that.ruleForm.deliveryDate == null){
+          this.ruleForm.suggestedPrice = ' '
+           this.ruleForm.totalAmountDue = ' '
+        }
+
         if(parseFloat(that.ruleForm.gallonsRequested).toString() == "NaN"){
             console.log("The input is not a number")
             this.ruleForm.gallonsRequested = ' '
@@ -272,9 +277,15 @@
           totalAmountDue : that.ruleForm.totalAmountDue
         });
         console.log(postData)
-        alert(typeof(that.ruleForm.gallonsRequested))
+        // alert(typeof(that.ruleForm.gallonsRequested))
         if(that.ruleForm.gallonsRequested !=''&& that.ruleForm.deliveryAddress !='' && that.ruleForm.deliveryDate !='' && that.ruleForm.suggestedPrice!='' && that.ruleForm.totalAmountDue!='' ){
-          that.$axios.post('/api/submitOrder/',postData).then(function(res){
+          if(that.ruleForm.deliveryDate == null){
+             that.$message({
+                 message: 'please enter the require info',
+                type: 'warning'
+              }); 
+          }else{
+              that.$axios.post('/api/submitOrder/',postData).then(function(res){
               that.$message({
                  message: 'sumbit success',
                  type: 'success'
@@ -282,8 +293,9 @@
           },function(){
             console.log('error');
           });
+          }        
         }else{          
-                 that.$message({
+              that.$message({
                  message: 'please enter the require info',
                 type: 'warning'
               }); 
