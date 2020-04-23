@@ -503,8 +503,8 @@
             return false;
           }
           console.log(that.userlist.zipcode.length);
-          // let value = that.userlist.zipcode.replace('/(^\s*)|(\s*$)','');
-          // let num = Number(value);
+          let value = that.userlist.zipcode.replace('/(^\s*)|(\s*$)','');
+          let num = Number(value);
           if(that.userlist.city==null||that.userlist.zipcode.length<5|| that.userlist.zipcode.length>9){
             alert("please enter at least 5 digits of zipcode and no more than 9 digits");
             return false;
@@ -524,7 +524,9 @@
             console.log(res.data)
             if(res.data.code==3001){
               alert(res.data.msg)
+              this.backFlag=true;
             }else if (res.data.code==3002){
+              this.backFlag=true;
               alert(res.data.msg)
             }
           }).catch((err)=>{
