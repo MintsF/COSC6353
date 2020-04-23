@@ -285,10 +285,19 @@
               }); 
           }else{
               that.$axios.post('/api/submitOrder/',postData).then(function(res){
-              that.$message({
-                 message: 'sumbit success',
-                 type: 'success'
-              });
+                if(res.data.code==2001){
+                  that.$message({
+                    message: 'sumbit success',
+                    type: 'success'
+                  });
+
+                }else{
+                    that.$message({
+                    message: 'sumbit fail',
+                    type: 'error'
+                  });
+                }
+  
           },function(){
             console.log('error');
           });
