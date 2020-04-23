@@ -277,7 +277,7 @@
           totalAmountDue : that.ruleForm.totalAmountDue
         });
         console.log(postData)
-        alert(typeof(that.ruleForm.gallonsRequested))
+        // alert(typeof(that.ruleForm.gallonsRequested))
         if(that.ruleForm.gallonsRequested !=''&& that.ruleForm.deliveryAddress !='' && that.ruleForm.deliveryDate !='' && that.ruleForm.suggestedPrice!='' && that.ruleForm.totalAmountDue!='' ){
           if(that.ruleForm.deliveryDate == null){
              that.$message({
