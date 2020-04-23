@@ -20,9 +20,9 @@ class Order(models.Model):
 	username = models.CharField(max_length=100,null= False)
 	deliveryDate = models.DateTimeField()
 	deliveryAddress = models.CharField(max_length=100, null =False, blank= False)
-	gallonsRequested= models.IntegerField(null=False,default ='0')
-	suggestedPrice= models.FloatField(null=False,default ='0')
-	totalAmountDue = models.FloatField(null=False,default ='0')
+	gallonsRequested= models.DecimalField(null=False,default ='0',max_digits=20, decimal_places=2)
+	suggestedPrice= models.DecimalField(null=False,default ='0',max_digits=20, decimal_places=2)
+	totalAmountDue = models.DecimalField(null=False,default ='0',max_digits=20, decimal_places=2)
 	
 	
 

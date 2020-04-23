@@ -256,7 +256,7 @@
             var suggestedPrice = currentPrice + margin;
             this.ruleForm.suggestedPrice = suggestedPrice;
             // alert(this.ruleForm.gallonsRequested);
-            this.ruleForm.totalAmountDue = suggestedPrice* this.ruleForm.gallonsRequested;
+            this.ruleForm.totalAmountDue = (suggestedPrice* this.ruleForm.gallonsRequested).toFixed(2);
             // alert(this.ruleForm.gallonsRequested);
         }else{
             // alert("please enter required info");

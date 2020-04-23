@@ -206,6 +206,8 @@ def submitOrder(request):
 		# print(deliveryDate)
 		suggestedPrice = request.POST.get('suggestedPrice')
 		totalAmountDue = request.POST.get('totalAmountDue')
+		print("ddddddddddddddddddd")
+		print(gallonsRequested)
 
 		# print(username)
 		newOrder=Order.objects.create(username=username,gallonsRequested=gallonsRequested,deliveryAddress=deliveryAddress,deliveryDate=deliveryDate,suggestedPrice=suggestedPrice,totalAmountDue=totalAmountDue)
