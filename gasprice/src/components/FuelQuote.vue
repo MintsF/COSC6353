@@ -17,7 +17,6 @@
       <el-menu-item index="2">Fuel Quote History</el-menu-item>
       </el-menu>
       <!--<div class="line"></div>-->
-
     </div>
 
   </div>
@@ -27,7 +26,9 @@
          <h2>Fuel Quote </h2>
          <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="200px" class="demo-ruleForm" style="margin: 0px 330px">
            <el-form-item label="Gallons Requested" required prop="gallonsRequested">
-             <el-col :span="21"><el-input v-model.number="ruleForm.gallonsRequested"  v-on:input="getPrice()"  placeholder="please input  Gallons Requested"></el-input></el-col>
+             <!-- v-on:input="getPrice()"  -->
+             <!-- gallonsKeyup() -->
+             <el-col :span="21"><el-input v-model.number="ruleForm.gallonsRequested" v-on:input="gallons()" placeholder="please input  Gallons Requested"></el-input></el-col>
              <el-col :span="1">Gal.</el-col>
            </el-form-item>
            <el-form-item label=" Deliver Date" required prop="deliveryDate">
@@ -196,12 +197,27 @@
         this.ruleForm.deliveryDate = val;
         console.log(this.ruleForm.deliveryDate );
       },
-
+  
+      gallons(){
+        var that = this;
+        // console.log("gallons")
+        if(parseFloat(that.ruleForm.gallonsRequested).toString() == "NaN"){
+            console.log("The input is not a number")
+            this.ruleForm.gallonsRequested = ' '
+        }else{         
+            if(that.ruleForm.gallonsRequested < 0){
+                that.ruleForm.gallonsRequested = ' '
+            }else{
+                // console.log("get Price now")
+                this.getPrice()
+            }
+        }
+      },
       getPrice(){
           var that = this;
           // alert("getPrice");
-         if(that.ruleForm.gallonsRequested ===''){
-           return;
+         if(that.ruleForm.gallonsRequested == ' '){
+            return;
          }
          
         if(that.ruleForm.deliveryAddress !='' && that.ruleForm.deliveryDate !='' ){
