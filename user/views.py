@@ -73,7 +73,7 @@ def getUserProfile(request):
 				'address2':'',
 				'city':'',
 				'state':'',
-				'zipCode':'iii'
+				'zipCode':''
 			}
 		else:
 			ret['profile'] = {
@@ -95,9 +95,12 @@ def initprofile(request):
 	ret={'code':5000,'userid':None,'username':None,'address1':None,'address2':None,'city':None, 'state':None,'zipcode':None, 'msg':None}
 	try:
 		userid =eval(request.POST.get('userid'))
+		print(userid)
 		# flag = UserInfo.objects.get(username=userid).flag
 		flag= Profile.objects.filter(username=userid).count()
+		print(flag)
 		if flag==1:
+			
 			ret['code']=5001
 			ret['userid']=userid
 			ret['username']=Profile.objects.get(username=userid).fullname

@@ -92,6 +92,7 @@
         return{
         title: 'Change password',
         show: false,
+        backFlag: false,
         userlist: {
           userid: '',
           username: '',
@@ -373,6 +374,8 @@
     created: function(){
       var that= this;
       that.userlist.userid=localStorage.getItem('username');
+      console.log("username:   ");
+      console.log(that.userlist.userid);
       var postData = this.$qs.stringify({
       userid: that.userlist.userid,
       // username: that.userlist.username,
@@ -382,21 +385,28 @@
       // state: that.userlist.state,
       // zipcode: that.userlist.zipcode,
       });
+      console.log("hhhhhhhhhhhhh");
       this.$axios.post('/api/initProfile/',postData).then(res=>{
         console.log(res.data);
-        that.userlist.userid=eval(res.data.userid);
+        console.log("yyyyyyyyyyyyyyyyyyyyy");
+        // that.userlist.userid=eval(res.data.userid);
         that.userlist.username=res.data.username;
         that.userlist.address1=res.data.address1;
         that.userlist.address2=res.data.address2;
         that.userlist.city=res.data.city;
         that.userlist.state=res.data.state;
         that.userlist.zipcode=res.data.zipcode;
+        if(res.data.code==5001)
+          this.backFlag=true;
       }).catch((err)=>{
-        console.log("can not connec to server")
+        console.log("can not connec to serversss")
       })
 
 
     },
+    // mounted(){
+    //   this.showProfile();
+    // },
 
     methods:{
         hideModal() {
@@ -458,35 +468,44 @@
           this.show=true
         },
         BacktoHome(){
-          this.$router.push('/FuelQuote')
+          if(this.backFlag)
+            this.$router.push('/FuelQuote');
+          else
+            alert("please fill the profile ");
 
         },
         EditorUserClick(formName){
           var that= this;
           that.userlist.userid = localStorage.getItem('username');
-          console.log(that.userlist.address1)
-          if(that.userlist.username==''||that.userlist.username.length>50){
+          console.log(that.userlist.userid)
+          if(that.userlist.username==null||that.userlist.username.length>50){
             alert("full name can not be none or no more than 50 characters");
             return false;
           }
 
-          if(that.userlist.address1==''){
+          if(that.userlist.address1===null || that.userlist.address1.length>100){
             alert("address1 can not be none or no more than 100 characters");
             return false;
           }
 
-          if(that.userlist.city==''){
+          if(that.userlist.address2!=null&&that.userlist.address2.length>100 ){
+            alert("address2 can not  more than 100 characters");
+            return false;
+          }
+
+
+          if(that.userlist.city==null||that.userlist.city.length<=0){
             alert("please enter your city");
             return false;
           }
-          if (that.userlist.state==''){
+          if (that.userlist.state==null){
             alert("please enter your state");
             return false;
           }
           console.log(that.userlist.zipcode.length);
-          let value = that.userlist.zipcode.replace('/(^\s*)|(\s*$)','');
-          let num = Number(value);
-          if(that.userlist.zipcode.length<5|| that.userlist.zipcode.length>9||isNaN(num)){
+          // let value = that.userlist.zipcode.replace('/(^\s*)|(\s*$)','');
+          // let num = Number(value);
+          if(that.userlist.city==null||that.userlist.zipcode.length<5|| that.userlist.zipcode.length>9){
             alert("please enter at least 5 digits of zipcode and no more than 9 digits");
             return false;
           }
