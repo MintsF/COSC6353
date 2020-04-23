@@ -45,18 +45,15 @@ export default new Router({
     	name: 'Profile',
     	component: Profile,
       meta: {
-        isLogin: true
+        requireAuth: true,
       }
-    }
-
-
-    ,
+    } ,
     {
       path: '/FuelQuote',
       name: 'FuelQuote',
       component: FuelQuote,
       meta: {
-        isLogin: true
+        requireAuth: true,
       }
     },
     {
@@ -64,7 +61,7 @@ export default new Router({
       name: 'HelloWorld',
       component: HelloWorld,
       meta: {
-        isLogin: true
+        requireAuth: true,
       }
     }
 

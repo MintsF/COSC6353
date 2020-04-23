@@ -65,6 +65,7 @@ export default {
 
     methods:{
       login(){
+        var that = this
       	// var name=parseInt(this.userInfo.username);
         var name = this.userInfo.username
       	var password=this.userInfo.password;
@@ -90,8 +91,20 @@ export default {
           console.log("connect to server success");
           console.log(res.data);
           localStorage.setItem('username',JSON.stringify(res.data.username));
+          // //////////////////////////////////////////
+          let loginstatus = true;
+          sessionStorage.setItem('loginstatus', loginstatus)
+          that.$store.commit('setRouting', loginstatus);
 
+          // 在vuex文件中
+          // loginstatus: sessionStorage.getItem('loginstatus') || false
 
+          // setRouting (state, loginstatus) {
+          //   state.loginstatus = loginstatus
+          //   sessionStorage.setItem('loginstatus', loginstatus)
+          // };
+
+        //////////////////////////////
           if (res.data.code==1002){
             if(res.data.flag!=0)
               this.$router.push('/FuelQuote')

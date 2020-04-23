@@ -188,7 +188,7 @@
               this.contentId = 1;
           }else if(key == 2){
               this.contentId = 2;
-             this.getFuleQuoteHistory();
+              this.getFuleQuoteHistory();
           }
 //        console.log(key, keyPath);
       },
@@ -277,6 +277,7 @@
         });
         console.log(postData)
         // alert(that.ruleForm.gallonsRequested)
+        
         if(that.ruleForm.gallonsRequested !=''&& that.ruleForm.deliveryAddress !='' && that.ruleForm.deliveryDate !='' && that.ruleForm.suggestedPrice!='' && that.ruleForm.totalAmountDue!='' ){
           if(that.ruleForm.deliveryDate == null){
              that.$message({
@@ -290,10 +291,9 @@
                     message: 'sumbit success',
                     type: 'success'
                   });
-
                 }else{
                     that.$message({
-                    message: 'sumbit fail',
+                    message: 'please enter the require info',
                     type: 'error'
                   });
                 }
@@ -323,16 +323,19 @@
       getFuleQuoteHistory(){
         var that = this;
         console.log(that.userName);
-
         var postData =this.$qs.stringify ({
           username: that.userName,
         });
         this.$axios.post('/api/getOrderHistory/',postData).then(function(res){
-          var msg = res.data;
-          console.log(res);
-          that.tableData = msg.orderList;
-          console.log(that.tableData)
-          that.total = msg.total;
+          if(msg = res.code = 4000){
+            return
+          }else{
+            var msg = res.data;
+            console.log(res);
+            that.tableData = msg.orderList;
+            console.log(that.tableData)
+            that.total = msg.total;
+          }
         },function(){
           console.log('error');
         });

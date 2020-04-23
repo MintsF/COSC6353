@@ -26,7 +26,24 @@ Vue.prototype.$qs = qs
 
 // axios.defaults.withCredentials=true;
 axios.defaults.baseURL = 'http://127.0.0.1:8000';
-
+// ///////////
+router.beforeEach((to, from, next) => {
+  // console.log("怎么没有运行")
+  if (to.meta.requireAuth) { // 判断该路由是否需要登录权限
+    if (sessionStorage.getItem('loginstatus')) { // 判断本地是否存在access_token
+      next()
+    } else {
+      // 未登录,跳转到登陆页面，并且带上 将要去的地址，方便登陆后跳转。
+      next({
+        path: '/',
+        // query:{ referrer: to.fullPath}
+      })
+    }
+  } else {
+    next()
+  }
+});
+  // ////////////////////////////
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
@@ -36,7 +53,46 @@ new Vue({
 
 })
 
-// export default Vue.extend({
+
+// 路由判断登录 根据路由配置文件的参数
+// router.beforeEach((to, from, next) => {
+//      console.log("怎么没有运行")
+//    if (to.matched.some(record => record.meta.requireAuth)){ // 判断该路由是否需要登录权限
+//       console.log('need login');
+//     if (localStorage.token) { // 判断当前的token是否存在 ； 登录存入的token
+//       next();
+//     }
+//     else {
+//      next({
+//       path: '/',
+//       query: {redirect: to.fullPath} // 将跳转的路由path作为参数，登录成功后跳转到该路由
+//      })
+//     }
+//    }
+//    else {
+//     next();
+//    }
+//   });
+
+// 配置路由权限
+// router.beforeEach((to, from, next) => {
+//   console.log("怎么没有运行")
+//   if (to.meta.requireAuth) { // 判断该路由是否需要登录权限
+//     if (sessionStorage.getItem('loginstatus')) { // 判断本地是否存在access_token
+//       next()
+//     } else {
+//       // 未登录,跳转到登陆页面，并且带上 将要去的地址，方便登陆后跳转。
+//       next({
+//         path: '/',
+//         query:{ referrer: to.fullPath}
+//       })
+//     }
+//   } else {
+//     next()
+//   }
+// })
+
+// // export default Vue.extend({
 //   data: () => ({
 //     country: '',
 //     region: ''
