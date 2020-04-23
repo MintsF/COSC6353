@@ -327,8 +327,9 @@
           username: that.userName,
         });
         this.$axios.post('/api/getOrderHistory/',postData).then(function(res){
-          if(msg = res.code = 4000){
-            return
+          var msg = res.data;
+          if(msg.code == 4000){
+            return ;
           }else{
             var msg = res.data;
             console.log(res);
