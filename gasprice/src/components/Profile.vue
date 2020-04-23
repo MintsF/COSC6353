@@ -503,9 +503,10 @@
             return false;
           }
           console.log(that.userlist.zipcode.length);
-          let value = that.userlist.zipcode.replace('/(^\s*)|(\s*$)','');
-          let num = Number(value);
-          if(that.userlist.city==null||that.userlist.zipcode.length<5|| that.userlist.zipcode.length>9){
+          var numReg = /^[0-9]*$/
+          var numRe = new RegExp(numReg)
+          var str = that.userlist.zipcode.replace(/\s*/g,'');
+          if(str==null||str.length<5|| str.length>9||!numRe.test(str)){
             alert("please enter at least 5 digits of zipcode and no more than 9 digits");
             return false;
           }
