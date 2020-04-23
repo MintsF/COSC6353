@@ -28,7 +28,8 @@
            <el-form-item label="Gallons Requested" required prop="gallonsRequested">
              <!-- v-on:input="getPrice()"  -->
              <!-- gallonsKeyup() -->
-             <el-col :span="21"><el-input v-model.number="ruleForm.gallonsRequested" v-on:input="gallons()" placeholder="please input  Gallons Requested"></el-input></el-col>
+             <!-- v-on:input="gallons()" -->
+             <el-col :span="21"><el-input v-model="ruleForm.gallonsRequested" oninput="value=value.replace(/[^0-9.]/g,'')" v-on:input="gallons()"  placeholder="please input  Gallons Requested"></el-input></el-col>
              <el-col :span="1">Gal.</el-col>
            </el-form-item>
            <el-form-item label=" Deliver Date" required prop="deliveryDate">
@@ -115,16 +116,16 @@
         rules: {
           gallonsRequested: [
             { required: true,  message: 'please enter  Gallons Requested', trigger: 'blur' },
-            { type: 'number',  message: 'Gallons Requested must be a positive integer', trigger: 'blur' },
-            { 
-              validator (rule, value, callback) {
-                if (/(^[1-9]\d*$)/.test(value)) {
-                  callback()
-                }else {
-                  callback(new Error('please input a positive integer'))
-                }
-                },trigger: 'blur'
-            }
+            // { type: 'number',  message: 'Gallons Requested must be a positive number', trigger: 'blur' },
+            // { 
+            //   validator (rule, value, callback) {
+            //     if (/(^[0-9]\d*$)/.test(value)) {
+            //       callback()
+            //     }else {
+            //       callback(new Error('please input a positive number'))
+            //     }
+            //     },trigger: 'blur'
+            // }
           ],
           deliveryDate: [
             // { type: 'date', required: true, message: 'please select deliver Date', trigger: 'change' },
@@ -204,9 +205,13 @@
         if(parseFloat(that.ruleForm.gallonsRequested).toString() == "NaN"){
             console.log("The input is not a number")
             this.ruleForm.gallonsRequested = ' '
+            this.ruleForm.suggestedPrice = ' '
+            this.ruleForm.totalAmountDue = ' '
         }else{         
             if(that.ruleForm.gallonsRequested < 0){
                 that.ruleForm.gallonsRequested = ' '
+                this.ruleForm.suggestedPrice = ' '
+                this.ruleForm.totalAmountDue = ' '
             }else{
                 // console.log("get Price now")
                 this.getPrice()
@@ -217,9 +222,10 @@
           var that = this;
           // alert("getPrice");
          if(that.ruleForm.gallonsRequested == ' '){
+            this.ruleForm.suggestedPrice = ' '
+            this.ruleForm.totalAmountDue = ' '
             return;
          }
-         
         if(that.ruleForm.deliveryAddress !='' && that.ruleForm.deliveryDate !='' ){
             var locationFactor=0.04;
             var currentPrice = 1.5;
@@ -238,7 +244,6 @@
             if(this.ruleForm.gallonsRequested >=1000){
               gallonsRequestedFactor = 0.02
             }
-
             if(curMonth>='4' &&curMonth<='6'){
               rateFluctuation=0.04;
             }
@@ -246,7 +251,9 @@
             var margin = currentPrice * (locationFactor - rateHistoryFactor + gallonsRequestedFactor + companyProfitFactor + rateFluctuation)
             var suggestedPrice = currentPrice + margin;
             this.ruleForm.suggestedPrice = suggestedPrice;
+            // alert(this.ruleForm.gallonsRequested);
             this.ruleForm.totalAmountDue = suggestedPrice* this.ruleForm.gallonsRequested;
+            // alert(this.ruleForm.gallonsRequested);
         }else{
             // alert("please enter required info");
         }
@@ -264,6 +271,8 @@
           suggestedPrice :  that.ruleForm.suggestedPrice,
           totalAmountDue : that.ruleForm.totalAmountDue
         });
+        console.log(postData)
+        alert(typeof(that.ruleForm.gallonsRequested))
         if(that.ruleForm.gallonsRequested !=''&& that.ruleForm.deliveryAddress !='' && that.ruleForm.deliveryDate !='' && that.ruleForm.suggestedPrice!='' && that.ruleForm.totalAmountDue!='' ){
           that.$axios.post('/api/submitOrder/',postData).then(function(res){
               that.$message({
