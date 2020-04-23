@@ -1,4 +1,3 @@
-
 <template>
 <div >
   <div id="nav-bar">
@@ -277,11 +276,11 @@
           totalAmountDue : that.ruleForm.totalAmountDue
         });
         console.log(postData)
-        // alert(typeof(that.ruleForm.gallonsRequested))
+        // alert(that.ruleForm.gallonsRequested)
         if(that.ruleForm.gallonsRequested !=''&& that.ruleForm.deliveryAddress !='' && that.ruleForm.deliveryDate !='' && that.ruleForm.suggestedPrice!='' && that.ruleForm.totalAmountDue!='' ){
           if(that.ruleForm.deliveryDate == null){
              that.$message({
-                 message: 'please enter the require info',
+                message: 'please enter the require info',
                 type: 'warning'
               }); 
           }else{
@@ -296,7 +295,7 @@
           }        
         }else{          
               that.$message({
-                 message: 'please enter the require info',
+                message: 'please enter the require info',
                 type: 'warning'
               }); 
         }
