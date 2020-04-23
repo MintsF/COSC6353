@@ -104,7 +104,7 @@
           oldPassword: '',
           newPassword: '',
           confirmPassword: '',
-        },//用户信息表单
+        },
         formLabelWidth: "150px",
         columeTypeArr:[{
               value: "AL",
@@ -378,18 +378,8 @@
       console.log(that.userlist.userid);
       var postData = this.$qs.stringify({
       userid: that.userlist.userid,
-      // username: that.userlist.username,
-      // address1: that.userlist.address1,
-      // address2: that.userlist.address2,
-      // city: that.userlist.city,
-      // state: that.userlist.state,
-      // zipcode: that.userlist.zipcode,
       });
-      console.log("hhhhhhhhhhhhh");
       this.$axios.post('/api/initProfile/',postData).then(res=>{
-        console.log(res.data);
-        console.log("yyyyyyyyyyyyyyyyyyyyy");
-        // that.userlist.userid=eval(res.data.userid);
         that.userlist.username=res.data.username;
         that.userlist.address1=res.data.address1;
         that.userlist.address2=res.data.address2;
@@ -404,13 +394,10 @@
 
 
     },
-    // mounted(){
-    //   this.showProfile();
-    // },
 
     methods:{
         hideModal() {
-            // 取消弹窗回调
+            
             this.oldPassword='';
             this.newPassword='';
             this.confirmPassword='';
@@ -418,12 +405,10 @@
         },
 
         submit() {
-            // 确认弹窗回调
             
             var userInfo = localStorage.getItem('username');
-
             this.userlist.userid=userInfo;
-             console.log(userInfo)
+             // console.log(userInfo)
             if(this.userlist.oldPassword==''){
               alert("please input the old password")
               return false;
@@ -440,23 +425,21 @@
 
             var postData =this.$qs.stringify ({
               username: userInfo,
-                // oldpassword: this.userlist.password,
               password: this.userlist.oldPassword,
               newPassword: this.userlist.newPassword,
             });
             this.$axios.post('/api/changepassword/',postData).then(res=>{
               console.log("connect to the server success");
-              console.log(res.data);
+              // console.log(res.data);
               if (res.data.code==4001){
                 alert(res.data.msg)
               }
               if (res.data.code==4002){
-                console.log(res.data.msg)
+                // console.log(res.data.msg)
                 this.show = false
 
               }
               
-
               }).catch((err)=>{
                 console.log("can not connect to the server")
               })
@@ -477,7 +460,6 @@
         EditorUserClick(formName){
           var that= this;
           that.userlist.userid = localStorage.getItem('username');
-          console.log(that.userlist.userid)
           if(that.userlist.username==null||that.userlist.username.length>50){
             alert("full name can not be none or no more than 50 characters");
             return false;
@@ -493,7 +475,6 @@
             return false;
           }
 
-
           if(that.userlist.city==null||that.userlist.city.length<=0){
             alert("please enter your city");
             return false;
@@ -502,7 +483,6 @@
             alert("please enter your state");
             return false;
           }
-          console.log(that.userlist.zipcode.length);
           var numReg = /^[0-9]*$/
           var numRe = new RegExp(numReg)
           var str = that.userlist.zipcode.replace(/\s*/g,'');
@@ -510,7 +490,6 @@
             alert("please enter at least 5 digits of zipcode and no more than 9 digits");
             return false;
           }
-         
 
           var postData = this.$qs.stringify({
             userid: that.userlist.userid,

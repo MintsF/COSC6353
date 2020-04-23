@@ -178,7 +178,6 @@ def changepassword(request):
 		oldPassword = request.POST.get('password')
 		newPassword = request.POST.get('newPassword')
 		obj =  UserInfo.objects.filter(username=username,password=oldPassword).count()
-		# print(obj)
 		if obj==0:
 			ret['code']=4001
 			ret['username']=username
@@ -203,13 +202,11 @@ def submitOrder(request):
 		gallonsRequested = request.POST.get('gallonsRequested')
 		deliveryAddress = request.POST.get('deliveryAddress')
 		deliveryDate = request.POST.get('deliveryDate')
-		# print(deliveryDate)
 		suggestedPrice = request.POST.get('suggestedPrice')
 		totalAmountDue = request.POST.get('totalAmountDue')
 		print("ddddddddddddddddddd")
 		print(gallonsRequested)
 
-		# print(username)
 		newOrder=Order.objects.create(username=username,gallonsRequested=gallonsRequested,deliveryAddress=deliveryAddress,deliveryDate=deliveryDate,suggestedPrice=suggestedPrice,totalAmountDue=totalAmountDue)
 		newOrder.save()
 		ret['code']= 2001
@@ -229,10 +226,7 @@ def getOrderHistory(request):
 	ret ={'code': 4000, 'total':None,'orderList':[],}
 	try:
 		username= request.POST.get('username')
-		# print(username)
 		obj = Order.objects.filter(username = username)
-		# print(obj.values())
-		# print(obj.count())
 		ret['total'] = obj.count()
 		if(obj.count() == 0):
 			ret['orderList'] = {
@@ -245,9 +239,6 @@ def getOrderHistory(request):
 		else:
 			i=0
 			for order in obj:
-				# print(order)
-				# i=i+1
-				# print(i)
 				ret['orderList'].append({
 					'gallonsRequested': order.gallonsRequested,
 					'deliveryAddress': order.deliveryAddress,

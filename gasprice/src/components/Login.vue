@@ -31,7 +31,6 @@
       </div>
 
       <div>
-        <!-- <div class="tag2"> <router-link to=""><a  style="color: gray">forget password</a></router-link> </div> -->
         <div class="tag2"><router-link to="/SignUp"><a  style="color: gray">Sign Up</a></router-link></div>
       </div>
 
@@ -69,9 +68,6 @@ export default {
       	// var name=parseInt(this.userInfo.username);
         var name = this.userInfo.username
       	var password=this.userInfo.password;
-        console.log("-----------");
-        console.log(this.userInfo.username);
-        console.log(this.userInfo.password);
       	if (name==''){
       		alert('userName can not be none');
             return false;
@@ -94,15 +90,6 @@ export default {
           // //////////////////////////////////////////
           let loginstatus = true;
           sessionStorage.setItem('loginstatus', loginstatus)
-          // that.$store.commit('setRouting', loginstatus);
-
-          // 在vuex文件中
-          // loginstatus: sessionStorage.getItem('loginstatus') || false
-
-          // setRouting (state, loginstatus) {
-          //   state.loginstatus = loginstatus
-          //   sessionStorage.setItem('loginstatus', loginstatus)
-          // };
 
         //////////////////////////////
           if (res.data.code==1002){

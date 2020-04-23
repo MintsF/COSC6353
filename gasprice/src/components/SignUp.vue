@@ -74,8 +74,6 @@
         }
 
         var res=password.replace(/\s+/g,"");
-        console.log(res.length);
-        console.log(password.length);
         if(password==''||res.length!=password.length ){
           alert('password can not be none and can not include space');
           return false;
@@ -107,7 +105,6 @@
             return false;
           }
           this.$router.push({path:'/login'})
-          console.log(res)
         }, function(){
           console.log("sign up can not connect to server");
         })

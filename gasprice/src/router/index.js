@@ -1,10 +1,9 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import HelloWorld from '@/components/HelloWorld'
 import Login from '@/components/Login'
 
 import FuelQuote from '@/components/FuelQuote'
-// import SignUp from '@/components/SignUp'
+
 
 import SignUp from '@/components/SignUp'
 import Profile from '@/components/Profile.vue'
@@ -21,7 +20,7 @@ export default new Router({
       path: '/',
       redirect: '/Login',
       meta: {
-        isLogin: false
+        requireAuth: false,
         }
     },
     {
@@ -29,7 +28,7 @@ export default new Router({
       name: 'Login',
       component: Login,
       meta: {
-        isLogin: false
+        requireAuth: false,
       }
     },
     {
@@ -37,7 +36,7 @@ export default new Router({
     	name: 'SignUp',
     	component: SignUp,
       meta: {
-        isLogin: false
+        requireAuth: false,
       }
     },
     {
@@ -55,15 +54,8 @@ export default new Router({
       meta: {
         requireAuth: true,
       }
-    },
-    {
-      path: '/HelloWorld',
-      name: 'HelloWorld',
-      component: HelloWorld,
-      meta: {
-        requireAuth: true,
-      }
     }
+
 
   ]
 })

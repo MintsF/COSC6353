@@ -25,9 +25,6 @@
          <h2>Fuel Quote </h2>
          <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="200px" class="demo-ruleForm" style="margin: 0px 330px">
            <el-form-item label="Gallons Requested" required prop="gallonsRequested">
-             <!-- v-on:input="getPrice()"  -->
-             <!-- gallonsKeyup() -->
-             <!-- v-on:input="gallons()" -->
              <el-col :span="21"><el-input v-model="ruleForm.gallonsRequested" oninput="value=value.replace(/[^0-9.]/g,'')" v-on:input="gallons()"  placeholder="please input  Gallons Requested"></el-input></el-col>
              <el-col :span="1">Gal.</el-col>
            </el-form-item>
@@ -63,15 +60,6 @@
             <el-table-column prop="suggestedPrice" label="Suggested Price" width="180"></el-table-column>
             <el-table-column prop="totalAmountDue" label="Total Amount Due" width="180"></el-table-column>
           </el-table>
-<!--           <el-pagination
-            background
-            @current-change = "handleChangePage"
-            layout="prev, pager, next"
-            :page-size="5"
-            :total="total"
-            :current-page.sync="currentPage"
-            stripe style="float: right;padding: 20px 30px">
-          </el-pagination> -->
         </template>
       </div>
     </transition>
@@ -115,19 +103,9 @@
         rules: {
           gallonsRequested: [
             { required: true,  message: 'please enter  Gallons Requested', trigger: 'blur' },
-            // { type: 'number',  message: 'Gallons Requested must be a positive number', trigger: 'blur' },
-            // { 
-            //   validator (rule, value, callback) {
-            //     if (/(^[0-9]\d*$)/.test(value)) {
-            //       callback()
-            //     }else {
-            //       callback(new Error('please input a positive number'))
-            //     }
-            //     },trigger: 'blur'
-            // }
+
           ],
           deliveryDate: [
-            // { type: 'date', required: true, message: 'please select deliver Date', trigger: 'change' },
             { required: true, message: 'please select deliver Date', trigger: 'change' },
 
           ],
@@ -151,8 +129,6 @@
       getUserProfile(){
         var that = this;
         var userInfo = localStorage.getItem('username');
-        console.log("userInfo: "+ userInfo);
-        // var userName = "11223344";
         this.userName = userInfo;
         var postData =this.$qs.stringify ({
           username:  that.userName,
@@ -164,8 +140,6 @@
           console.log(res);
           if(msg.code==4001)
             that.profile.isRequestedFuel=1;
-          console.log("get History");
-          console.log(that.profile.isRequestedFuel);
 
         },function(){
           console.log('error');
@@ -190,17 +164,14 @@
               this.contentId = 2;
               this.getFuleQuoteHistory();
           }
-//        console.log(key, keyPath);
       },
       dateChange(val){
-        // console.log(val);
         this.ruleForm.deliveryDate = val;
         console.log(this.ruleForm.deliveryDate );
       },
   
       gallons(){
         var that = this;
-        // console.log("gallons")
         if(that.ruleForm.deliveryDate == null){
           this.ruleForm.suggestedPrice = ' '
            this.ruleForm.totalAmountDue = ' '
@@ -251,7 +222,6 @@
             if(curMonth>='4' &&curMonth<='6'){
               rateFluctuation=0.04;
             }
-    //        if(ruleForm.deliveryDate)
             var margin = currentPrice * (locationFactor - rateHistoryFactor + gallonsRequestedFactor + companyProfitFactor + rateFluctuation)
             var suggestedPrice = currentPrice + margin;
             this.ruleForm.suggestedPrice = suggestedPrice;
@@ -265,8 +235,8 @@
       submitForm(formName) {
         console.log("submit order")
         var that = this;
-        console.log("ddsd"+that.userName);
-        console.log(this.ruleForm);
+        // console.log("ddsd"+that.userName);
+        // console.log(this.ruleForm);
         var postData =this.$qs.stringify ({
           username: that.userName,
           gallonsRequested : that.ruleForm.gallonsRequested,
@@ -351,10 +321,6 @@
 
     }
 
-    // handleChangePage(val){
-    //   this.currentPage=val;
-    //   this.getFuleQuoteHistory();
-    // }
     },
 
     computed:{
