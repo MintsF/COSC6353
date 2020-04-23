@@ -465,7 +465,7 @@
           var that= this;
           that.userlist.userid = localStorage.getItem('username');
           console.log(that.userlist.address1)
-          if(that.userlist.username==''){
+          if(that.userlist.username==''||that.userlist.username.length>50){
             alert("full name can not be none or no more than 50 characters");
             return false;
           }
@@ -484,10 +484,14 @@
             return false;
           }
           console.log(that.userlist.zipcode.length);
-          if(that.userlist.zipcode.length<5|| that.userlist.zipcode.length>9){
-            alert("please enter at least 5 characters of zipcode and no more than 9 characters");
+          let value = that.userlist.zipcode.replace('/(^\s*)|(\s*$)','');
+          let num = Number(value);
+          if(that.userlist.zipcode.length<5|| that.userlist.zipcode.length>9||isNaN(num)){
+            alert("please enter at least 5 digits of zipcode and no more than 9 digits");
             return false;
           }
+         
+
           var postData = this.$qs.stringify({
             userid: that.userlist.userid,
             username: that.userlist.username,

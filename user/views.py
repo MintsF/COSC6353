@@ -69,11 +69,11 @@ def getUserProfile(request):
 		if obj.count() == 0:
 			# test, database have no data
 			ret['profile']={
-				'address1' : 'no address',
+				'address1' : '',
 				'address2':'',
-				'city':'Houston',
-				'state':'TX',
-				'zipCode':'77077'
+				'city':'',
+				'state':'',
+				'zipCode':'iii'
 			}
 		else:
 			ret['profile'] = {
